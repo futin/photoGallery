@@ -37,15 +37,7 @@ public class Home extends Activity implements AsyncTaskListener{
         setContentView(R.layout.activity_home);
 
         gridView= (GridView) findViewById(R.id.grid_view);
-    /*    fileSize=humanityFileSize();
 
-        if(fileSize>0 || !isOnline()){
-            gridViewAdapter = new GridViewAdapter(Home.this, file);
-            gridView.setAdapter(gridViewAdapter);
-        }
-        if(isOnline()){
-            waitTime(fileSize * 50, this);
-        }*/
         rs = new RestService(this);
         rs.getImages();
 
