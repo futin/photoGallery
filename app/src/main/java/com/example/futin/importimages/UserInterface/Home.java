@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.GridView;
 
 import com.example.futin.importimages.R;
@@ -38,8 +37,7 @@ public class Home extends Activity implements AsyncTaskListener{
         setContentView(R.layout.activity_home);
 
         gridView= (GridView) findViewById(R.id.grid_view);
-        fileSize=humanityFileSize();
-        Log.i("retard","size="+fileSize+" online="+isOnline());
+    /*    fileSize=humanityFileSize();
 
         if(fileSize>0 || !isOnline()){
             gridViewAdapter = new GridViewAdapter(Home.this, file);
@@ -47,7 +45,10 @@ public class Home extends Activity implements AsyncTaskListener{
         }
         if(isOnline()){
             waitTime(fileSize * 50, this);
-        }
+        }*/
+        rs = new RestService(this);
+        rs.getImages();
+
     }
 
     @Override

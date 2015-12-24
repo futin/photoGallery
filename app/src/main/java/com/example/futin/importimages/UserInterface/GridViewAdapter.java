@@ -1,7 +1,6 @@
 package com.example.futin.importimages.UserInterface;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,14 +68,8 @@ public class GridViewAdapter extends BaseAdapter {
         inflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView=inflater.inflate(R.layout.single_image, viewGroup, false);
         myImage= (ImageView) itemView.findViewById(R.id.imageView);
-            if (images != null && !checkFiles(singleImage)) {
                 singleImage = images.get(i);
                 imageLoader.DisplayImage(singleImage.getUrl(), myImage);
-            } else {
-                Bitmap b = imageLoader.getBitmapFromFile(file.listFiles()[i]);
-                myImage.setImageBitmap(b);
-            }
-
         return itemView;
     }
 
