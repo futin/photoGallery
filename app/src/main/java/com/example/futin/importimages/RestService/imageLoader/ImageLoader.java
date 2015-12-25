@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.futin.importimages.R;
+import com.example.futin.importimages.UserInterface.animation.MyAnimation;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,6 +32,7 @@ import java.util.concurrent.Executors;
 public class ImageLoader {
 
     public MemoryCache memoryCache ;
+    Context context;
     FileCache fileCache;
     private Map<ImageView, String> imageViews = Collections
             .synchronizedMap(new WeakHashMap<ImageView, String>());
@@ -39,6 +41,7 @@ public class ImageLoader {
     Handler handler = new Handler();
 
     public ImageLoader(Context context) {
+        this.context=context;
         fileCache = new FileCache(context);
         memoryCache = new MemoryCache();
         executorService = Executors.newFixedThreadPool(5);
@@ -51,6 +54,7 @@ public class ImageLoader {
         Bitmap bitmap = memoryCache.get(url);
         if (bitmap != null){
             imageView.setImageBitmap(bitmap);
+            new MyAnimation().setAnimation(context,imageView,800);
         }
         else {
             queuePhoto(url, imageView);
@@ -184,9 +188,10 @@ public class ImageLoader {
         public void run() {
             if (imageViewReused(photoToLoad))
                 return;
-            if (bitmap != null)
+            if (bitmap != null) {
                 photoToLoad.imageView.setImageBitmap(bitmap);
-            else
+                new MyAnimation().setAnimation(context, photoToLoad.imageView, 800);
+            }else
                 photoToLoad.imageView.setImageResource(stub_id);
         }
     }
