@@ -1,6 +1,7 @@
 package com.example.futin.importimages.UserInterface;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import com.example.futin.importimages.RestService.models.Image;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Futin on 12/22/2015.
@@ -25,29 +28,31 @@ public class GridViewAdapter extends BaseAdapter {
     LayoutInflater inflater;
     ArrayList<Image> images;
     ImageLoader imageLoader;
-    Image singleImage;
     FileCache fc;
-    File file;
-    int counter=0;
+    int fileSize=0;
+    Map<String, String> imageMap;
     public GridViewAdapter(Context context, ArrayList<Image> images) {
         this.context = context;
         this.images = images;
         fc=new FileCache(context);
+        instantiateSizeOfFiles();
         imageLoader=new ImageLoader(context);
-
     }
 
-    public GridViewAdapter(Context context, File file){
-        this.context=context;
-        this.file=file;
-        imageLoader=new ImageLoader(context);
-        fc=new FileCache(context);
-
+    void instantiateSizeOfFiles(){
+            fileSize=fc.getFileSize()+1;
+        Log.i("","file"+fileSize);
     }
 
     @Override
     public int getCount() {
-            return images.size();
+            if(images == null){
+                return fc.getFileSize();
+            }else{
+                initImageMap();
+                return images.size()>=fc.getFileSize() ?
+                       images.size() : images.size()+fc.getFileSize();
+            }
     }
 
     @Override
@@ -62,29 +67,47 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        Log.i("", "view=");
 
         ImageView myImage;
         inflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView=inflater.inflate(R.layout.single_image, viewGroup, false);
         myImage= (ImageView) itemView.findViewById(R.id.imageView);
-                singleImage = images.get(i);
-                imageLoader.DisplayImage(singleImage.getUrl(), myImage);
+        if(fileSize<=0 && images != null){
+            String url="";
+            for(Image img : images){
+                if(imageMap.containsKey(String.valueOf(img.getUrl().hashCode()))){
+                    url=img.getUrl();
+                    break;
+                }
+            }
+            imageLoader.DisplayImage(url, myImage);
+            imageMap.remove(String.valueOf(url.hashCode()));
+        }else{
+            loadFromDisc(myImage,i);
+            fileSize--;
+        }
         return itemView;
     }
 
-    public boolean checkFiles(Image image){
-        boolean found=false;
-        Log.i("", "Check=");
-
-        if(image != null && fc != null) {
-            for (File f : fc.getFileHashCode()) {
-                if (String.valueOf(image.getUrl().hashCode()).equalsIgnoreCase(f.getName())) {
-                    found = true;
-                }
+    void loadFromDisc(ImageView image, int i){
+        File file=fc.getFiles()[i];
+        Bitmap b=imageLoader.getBitmapFromFile(file);
+        image.setImageBitmap(b);
+        if(images != null) {
+            if (imageMap.containsKey(file.getName())) {
+                imageMap.remove(file.getName());
             }
         }
-        return found;
     }
+
+
+    void initImageMap(){
+        imageMap=new HashMap<>();
+        for(Image img: images){
+            if(!imageMap.containsKey(img.getUrl()))
+                imageMap.put(String.valueOf(img.getUrl().hashCode()),String.valueOf(img.getUrl().hashCode()));
+        }
+    }
+
 
 }

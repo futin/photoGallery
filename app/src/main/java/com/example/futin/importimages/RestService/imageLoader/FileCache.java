@@ -33,10 +33,12 @@ public class FileCache {
         return f;
     }
 
-    public File[] getFileHashCode(){
+    public int getFileSize(){
+        return cacheDir.listFiles().length;
+    }
+    public File[] getFiles() {
         return cacheDir.listFiles();
     }
-
     public void clear() {
         File[] files = cacheDir.listFiles();
         if (files == null)
