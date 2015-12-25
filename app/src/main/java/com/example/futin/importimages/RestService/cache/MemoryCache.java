@@ -30,7 +30,9 @@ import java.util.Map.Entry;
             limit = new_limit;
             Log.i(TAG, "MemoryCache will use up to " + limit / 1024. / 1024. + "MB");
         }
-
+        /*
+            Using given url, return Bitmap from cache that url exist
+        */
         public Bitmap get(String id) {
             try {
                 if (!cache.containsKey(id))
@@ -41,7 +43,9 @@ import java.util.Map.Entry;
                 return null;
             }
         }
-
+        /*
+             Place url into cache for later use, and calculate size on every entry
+        */
         public void put(String id, Bitmap bitmap) {
             try {
                 if (cache.containsKey(id))
@@ -55,7 +59,10 @@ import java.util.Map.Entry;
                 th.printStackTrace();
             }
         }
-
+        /*
+            If size of cache is greater than its limit, this method is used to clean cache and
+            remove first item in map
+        */
         private void checkSize() {
             Log.i(TAG, "cache size=" + size + " length=" + cache.size());
             if (size > limit) {
@@ -71,7 +78,9 @@ import java.util.Map.Entry;
                 Log.i(TAG, "Clean cache. New size " + cache.size());
             }
         }
-
+        /*
+            If Memory Overload exception is caught, clear cache memory
+        */
         public void clear() {
             try {
                 cache.clear();
@@ -80,14 +89,12 @@ import java.util.Map.Entry;
                 ex.printStackTrace();
             }
         }
-
+        /*
+            Simple method for calculation the size in Bytes of every Bitmap
+        */
         long getSizeInBytes(Bitmap bitmap) {
             if (bitmap == null)
                 return 0;
             return bitmap.getRowBytes() * bitmap.getHeight();
         }
-        public Map<String, Bitmap> getCache(){
-            return cache;
-        }
-
     }

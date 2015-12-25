@@ -31,13 +31,21 @@ public class FileLoader {
         executorService= Executors.newFixedThreadPool(5);
         handler=new Handler();
     }
-
+    /*
+        Send file and imageView where we are want to display photo to PhotoToLoad class,
+        and call our PhotosLoader through executor
+    */
     public void queuePhoto(File file, ImageView imageView) {
         imageViews.put(imageView, String.valueOf(file.getName()));
 
         PhotoToLoad p = new PhotoToLoad(file, imageView);
         executorService.submit(new PhotosLoader(p));
     }
+    /*
+     When executor calls this class, it is checking if imageView has been reused, if not extract
+     Bitmap from FILE that has been sent before. Then BitmapDisplayer class simply handle
+      that process.
+    */
     class PhotosLoader implements Runnable {
         PhotoToLoad photoToLoad;
 
@@ -60,13 +68,18 @@ public class FileLoader {
             }
         }
     }
+    /*
+        Method that is used for reusing imageView-s and saving memory
+    */
     boolean imageViewReused(PhotoToLoad photoToLoad) {
         String tag = imageViews.get(photoToLoad.imageView);
         if (tag == null || !tag.equals(photoToLoad.file.getName()))
             return true;
         return false;
     }
-
+    /*
+        Used to display bitmap in the UI thread
+    */
     class BitmapDisplayer implements Runnable {
         Bitmap bitmap;
         PhotoToLoad photoToLoad;
@@ -85,6 +98,10 @@ public class FileLoader {
             }
         }
     }
+    /*
+        Using file sent from GridViewAdapter class to decode it with imageLoader's method,
+        end return that as Bitmap.
+    */
     public Bitmap getBitmapFromFile(File file){
         Bitmap b = imageLoader.decodeFile(file);
         if (b != null)

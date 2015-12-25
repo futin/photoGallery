@@ -83,7 +83,10 @@ public class GridViewAdapter extends BaseAdapter {
         }
         return itemView;
     }
-
+    /*
+       Load files from disc, using queuePhoto method in order to place all photos in separate
+       threads and display them on main UI.
+    */
     void loadFromDisc(ImageView image, int i){
         File file=fc.getFiles()[i];
         fileLoader.queuePhoto(file,image);
@@ -94,6 +97,11 @@ public class GridViewAdapter extends BaseAdapter {
             }
         }
     }
+    /*
+        Load images from web, using DisplayImage method, check MemoryCache for current urls
+        and take Bitmaps if any, otherwise put them in queue for loading from internet and,
+        then decode and scale them to reduce memory consumption
+    */
     void loadFromWeb(ImageView myImage){
         String url="";
         for(Image img : images){
@@ -107,6 +115,9 @@ public class GridViewAdapter extends BaseAdapter {
             imageMap.remove(String.valueOf(url.hashCode()));
         }
     }
+    /*
+        Initialisation of map so we can compare elements later
+    */
     void initImageMap(){
         imageMap=new HashMap<>();
         for(Image img: images){
@@ -114,6 +125,11 @@ public class GridViewAdapter extends BaseAdapter {
                 imageMap.put(String.valueOf(img.getUrl().hashCode()),String.valueOf(img.getUrl().hashCode()));
         }
     }
+    /*
+        Calculation of difference between file and database images. If we have more images on disc,
+        add that difference in photo gallery, so we can see both images that we do not have from the
+        web, and our already downloaded images
+    */
     private int calculateDifference(){
         int total=0;
         if(images != null && fc != null){

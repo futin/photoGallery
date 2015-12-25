@@ -35,6 +35,10 @@ public class RSGetImagesTask extends AsyncTask<Void, Void, RSGetImagesResponse> 
         restTemplate=new RestTemplate();
     }
 
+    /*
+        Background task for acquiring urls from database, and placing them into Image class and returning
+        as list of Images
+     */
     @Override
     protected RSGetImagesResponse doInBackground(Void... params) {
         try {
@@ -45,9 +49,8 @@ public class RSGetImagesTask extends AsyncTask<Void, Void, RSGetImagesResponse> 
             HttpEntity<String> entity = new HttpEntity<>(jsonText, header);
             String address = RSDataSingleton.getInstance().getServerUrl().getImagesUrl();
 
-            Log.i(TAG, "Address: " + address);
             ResponseEntity response = restTemplate.exchange(address, HttpMethod.GET, entity, String.class);
-            Log.i(TAG, "After response ");
+
             if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
                 return new RSGetImagesResponse(HttpStatus.NOT_FOUND,
                         HttpStatus.NOT_FOUND.name());
@@ -58,10 +61,10 @@ public class RSGetImagesTask extends AsyncTask<Void, Void, RSGetImagesResponse> 
                 return new RSGetImagesResponse(HttpStatus.INTERNAL_SERVER_ERROR,
                         HttpStatus.INTERNAL_SERVER_ERROR.name());
             } else {
-                Log.i(TAG, "Response ok ");
                 String jsonBody=response.getBody().toString();
                 JSONArray array=new JSONArray(jsonBody);
                 ArrayList<Image> listOfImages=new ArrayList<>();
+                //parsing every single element from json response, and taking needed data
                 for (int i=0; i<array.length();i++){
                     JSONObject objCity=array.getJSONObject(i);
 
@@ -71,13 +74,12 @@ public class RSGetImagesTask extends AsyncTask<Void, Void, RSGetImagesResponse> 
                     Image image=new Image(name, url);
                     listOfImages.add(image);
                 }
-                Log.i(TAG, "Images: "+listOfImages.toString());
 
                 return new RSGetImagesResponse(HttpStatus.OK,
                         HttpStatus.OK.name(),listOfImages);
             }
 
-
+        //in case of exception
         } catch (HttpClientErrorException e) {
             Log.e(TAG, "Http Status: " + e.getStatusCode());
             Log.e(TAG, "Http Error: " + e.getResponseBodyAsString());
@@ -93,11 +95,13 @@ public class RSGetImagesTask extends AsyncTask<Void, Void, RSGetImagesResponse> 
             return new RSGetImagesResponse(null, null);
         }
     }
-
+    /*
+        This data is caught by Home activity, through AsyncTaskListener
+    */
     @Override
     protected void onPostExecute(RSGetImagesResponse rsGetCitiesResponse) {
         super.onPostExecute(rsGetCitiesResponse);
-        Log.i(TAG, "On post ok");
+        Log.i(TAG, "OnPost ok");
         returnData.returnDataOnPostExecute(rsGetCitiesResponse);
     }
 }

@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.example.futin.importimages.R;
 import com.example.futin.importimages.RestService.cache.FileCache;
 import com.example.futin.importimages.RestService.cache.MemoryCache;
 import com.example.futin.importimages.UserInterface.animation.MyAnimation;
@@ -49,26 +48,33 @@ public class ImageLoader {
         executorService = Executors.newFixedThreadPool(5);
     }
 
-    final int stub_id = R.drawable.temp_img;
-
+    /*
+        Method for ether displaying images from cache, or putting them to queue
+    */
     public void DisplayImage(String url, ImageView imageView) {
         imageViews.put(imageView, url);
         Bitmap bitmap = memoryCache.get(url);
         if (bitmap != null){
             imageView.setImageBitmap(bitmap);
+            // Class with method for setting animation, that takes context where should animation
+            // be displayed, imageView that displays that photo and random duration from [0,800)ms
             new MyAnimation().setAnimation(context,imageView,800);
         }
         else {
             queuePhoto(url, imageView);
-            imageView.setImageResource(stub_id);
         }
     }
-
+    /*
+        Send url and imageView where we are want to display photo to PhotoToLoad class,
+        and call our PhotosLoader through executor
+    */
     private void queuePhoto(String url, ImageView imageView) {
         PhotoToLoad p = new PhotoToLoad(url, imageView);
         executorService.submit(new PhotosLoader(p));
     }
-
+    /*
+        Method that is returning Bitmap, ether by getting cached file, or downloading it from net
+    */
     private Bitmap getBitmap(String url) {
         File f = fileCache.getFile(url);
 
@@ -100,7 +106,9 @@ public class ImageLoader {
         }
     }
 
-    // Decodes image and scales it to reduce memory consumption
+    /*
+        Decodes image and scales it to reduce memory consumption
+    */
     public Bitmap decodeFile(File f) {
         try {
             // Decode image size
@@ -136,7 +144,11 @@ public class ImageLoader {
         }
         return null;
     }
-
+    /*
+        When executor calls this class, it is checking if imageView has been reused, if not extract
+        Bitmap from url that has been sent before, and put it in cacheMap. Then BitmapDisplayer
+        class simply handle that process.
+    */
     class PhotosLoader implements Runnable {
         PhotoToLoad photoToLoad;
 
@@ -161,7 +173,9 @@ public class ImageLoader {
             }
         }
     }
-
+    /*
+        Method that is used for reusing imageView-s and saving memory
+    */
     boolean imageViewReused(PhotoToLoad photoToLoad) {
         String tag = imageViews.get(photoToLoad.imageView);
         if (tag == null || !tag.equals(photoToLoad.url))
@@ -169,8 +183,10 @@ public class ImageLoader {
         return false;
     }
 
-    // Used to display bitmap in the UI thread
-    class BitmapDisplayer implements Runnable {
+    /*
+        Used to display bitmap in the UI thread
+    */
+   public class BitmapDisplayer implements Runnable {
         Bitmap bitmap;
         PhotoToLoad photoToLoad;
 
@@ -185,8 +201,7 @@ public class ImageLoader {
             if (bitmap != null) {
                 photoToLoad.imageView.setImageBitmap(bitmap);
                 new MyAnimation().setAnimation(context, photoToLoad.imageView, 800);
-            }else
-                photoToLoad.imageView.setImageResource(stub_id);
+            }
         }
     }
 

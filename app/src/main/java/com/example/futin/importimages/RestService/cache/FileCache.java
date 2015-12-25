@@ -25,20 +25,30 @@ public class FileCache {
         if (!cacheDir.exists())
             cacheDir.mkdirs();
     }
-
+    /*
+        Since files are saved as hashCode on our disc, we need to extract that hashcode to create
+        File
+    */
     public File getFile(String url) {
         String filename = String.valueOf(url.hashCode());
-        // String filename = URLEncoder.encode(url);
         File f = new File(cacheDir, filename);
         return f;
     }
-
+    /*
+        Simple method for getting length of files in our directory
+    */
     public int getFileSize(){
         return cacheDir.listFiles().length;
     }
+    /*
+        Simple method for getting array of Files
+    */
     public File[] getFiles() {
         return cacheDir.listFiles();
     }
+    /*
+        Delete all files if something goes wrong
+    */
     public void clear() {
         File[] files = cacheDir.listFiles();
         if (files == null)

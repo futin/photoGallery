@@ -7,6 +7,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Utils {
+    /*
+        Simple method for getting input stream and writing it to output stream, in this case,
+        stream of image bytes
+    */
     public static void CopyStream(InputStream is, OutputStream os)
     {
         final int buffer_size=1024;

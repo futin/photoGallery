@@ -16,6 +16,9 @@ public class RestService {
         this.returnData = returnData;
     }
 
+    /*
+        Method that execute AsyncTask method and returns list of Images
+    */
     public void getImages(){
         new RSGetImagesTask(returnData).execute((Void) null);
     }

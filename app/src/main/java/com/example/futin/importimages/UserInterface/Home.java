@@ -37,6 +37,10 @@ public class Home extends Activity implements AsyncTaskListener{
         }
     }
 
+    void initAdapter(ArrayList<Image> images){
+        gridViewAdapter = new GridViewAdapter(Home.this, images);
+        gridView.setAdapter(gridViewAdapter);
+    }
     @Override
     public void returnDataOnPostExecute(Object obj) {
         response= (RSGetImagesResponse) obj;
@@ -50,11 +54,8 @@ public class Home extends Activity implements AsyncTaskListener{
         NetworkInfo netInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         return netInfo != null && netInfo.isConnected();
     }
-    void initAdapter(ArrayList<Image> images){
-        gridViewAdapter = new GridViewAdapter(Home.this, images);
-        gridView.setAdapter(gridViewAdapter);
-    }
-    /*//check for mobile data
+
+    /* check for mobile data
     boolean isMobileDataEnabled(){
         boolean mobileDataEnabled = false; // Assume disabled
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

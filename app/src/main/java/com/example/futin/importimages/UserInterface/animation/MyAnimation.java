@@ -14,6 +14,9 @@ import java.util.Random;
  */
 public class MyAnimation{
 
+    /*
+        Animation used for displaying images that is using scaling and transparency as animation.
+    */
     public void setAnimation(Context context, ImageView image, int duration){
         Animation myFadeInAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_in);
         myFadeInAnimation.setDuration(new Random().nextInt(duration));
