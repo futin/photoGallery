@@ -1,4 +1,4 @@
-package com.example.futin.importimages.RestService.imageLoader;
+package com.example.futin.importimages.RestService.loaders;
 
 /**
  * Created by Futin on 12/22/2015.
@@ -12,6 +12,8 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.futin.importimages.R;
+import com.example.futin.importimages.RestService.cache.FileCache;
+import com.example.futin.importimages.RestService.cache.MemoryCache;
 import com.example.futin.importimages.UserInterface.animation.MyAnimation;
 
 import java.io.File;

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.GridView;
 
 import com.example.futin.importimages.R;
@@ -14,7 +13,6 @@ import com.example.futin.importimages.RestService.listeners.AsyncTaskListener;
 import com.example.futin.importimages.RestService.models.Image;
 import com.example.futin.importimages.RestService.response.RSGetImagesResponse;
 
-import java.io.File;
 import java.util.ArrayList;
 
 
@@ -24,7 +22,6 @@ public class Home extends Activity implements AsyncTaskListener{
     RSGetImagesResponse response;
     GridView gridView;
     GridViewAdapter gridViewAdapter;
-    File file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +36,7 @@ public class Home extends Activity implements AsyncTaskListener{
             rs.getImages();
         }
     }
-    void test(String text){
-        Log.i("",text);
-    }
+
     @Override
     public void returnDataOnPostExecute(Object obj) {
         response= (RSGetImagesResponse) obj;
@@ -55,9 +50,6 @@ public class Home extends Activity implements AsyncTaskListener{
         NetworkInfo netInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         return netInfo != null && netInfo.isConnected();
     }
-
-
-
     void initAdapter(ArrayList<Image> images){
         gridViewAdapter = new GridViewAdapter(Home.this, images);
         gridView.setAdapter(gridViewAdapter);

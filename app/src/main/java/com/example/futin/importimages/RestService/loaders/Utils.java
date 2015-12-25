@@ -1,4 +1,4 @@
-package com.example.futin.importimages.RestService.imageLoader;
+package com.example.futin.importimages.RestService.loaders;
 
 /**
  * Created by Futin on 12/22/2015.

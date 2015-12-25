@@ -1,4 +1,4 @@
-package com.example.futin.importimages.RestService.imageLoader;
+package com.example.futin.importimages.RestService.cache;
 import android.graphics.Bitmap;
 import android.util.Log;
 import java.util.Collections;

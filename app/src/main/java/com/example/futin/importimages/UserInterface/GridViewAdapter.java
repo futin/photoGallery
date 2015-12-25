@@ -8,9 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.example.futin.importimages.R;
-import com.example.futin.importimages.RestService.imageLoader.FileCache;
-import com.example.futin.importimages.RestService.imageLoader.FileLoader;
-import com.example.futin.importimages.RestService.imageLoader.ImageLoader;
+import com.example.futin.importimages.RestService.cache.FileCache;
+import com.example.futin.importimages.RestService.loaders.FileLoader;
+import com.example.futin.importimages.RestService.loaders.ImageLoader;
 import com.example.futin.importimages.RestService.models.Image;
 
 import java.io.File;
@@ -77,9 +77,6 @@ public class GridViewAdapter extends BaseAdapter {
     void loadFromDisc(ImageView image, int i){
         File file=fc.getFiles()[i];
         fileLoader.queuePhoto(file,image);
-       // Bitmap b=imageLoader.getBitmapFromFile(file);
-      //  image.setImageBitmap(b);
-      //  new MyAnimation().setAnimation(context,image,800);
 
         if(images != null) {
             if (imageMap.containsKey(file.getName())) {
