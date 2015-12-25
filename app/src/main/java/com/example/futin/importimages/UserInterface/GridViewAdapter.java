@@ -29,20 +29,15 @@ public class GridViewAdapter extends BaseAdapter {
     ArrayList<Image> images;
     ImageLoader imageLoader;
     FileCache fc;
-    int fileSize=0;
+
     Map<String, String> imageMap;
     public GridViewAdapter(Context context, ArrayList<Image> images) {
         this.context = context;
         this.images = images;
         fc=new FileCache(context);
-        instantiateSizeOfFiles();
         imageLoader=new ImageLoader(context);
     }
 
-    void instantiateSizeOfFiles(){
-            fileSize=fc.getFileSize()+1;
-        Log.i("","file"+fileSize);
-    }
 
     @Override
     public int getCount() {
@@ -50,8 +45,7 @@ public class GridViewAdapter extends BaseAdapter {
                 return fc.getFileSize();
             }else{
                 initImageMap();
-                return images.size()>=fc.getFileSize() ?
-                       images.size() : images.size()+fc.getFileSize();
+                return images.size();
             }
     }
 
@@ -72,7 +66,8 @@ public class GridViewAdapter extends BaseAdapter {
         inflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView=inflater.inflate(R.layout.single_image, viewGroup, false);
         myImage= (ImageView) itemView.findViewById(R.id.imageView);
-        if(fileSize<=0 && images != null){
+        Log.i("","i1="+i+" and file1:"+fc.getFileSize());
+        if(i>=fc.getFileSize() && images != null){
             String url="";
             for(Image img : images){
                 if(imageMap.containsKey(String.valueOf(img.getUrl().hashCode()))){
@@ -84,7 +79,6 @@ public class GridViewAdapter extends BaseAdapter {
             imageMap.remove(String.valueOf(url.hashCode()));
         }else{
             loadFromDisc(myImage,i);
-            fileSize--;
         }
         return itemView;
     }
