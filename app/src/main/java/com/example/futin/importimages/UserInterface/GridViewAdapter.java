@@ -29,14 +29,24 @@ public class GridViewAdapter extends BaseAdapter {
     ImageLoader imageLoader;
     FileCache fc;
     FileLoader fileLoader;
-
     Map<String, String> imageMap;
+
+    int difference=0;
+
     public GridViewAdapter(Context context, ArrayList<Image> images) {
         this.context = context;
         this.images = images;
+        init();
+    }
+
+    void init(){
         fc=new FileCache(context);
         imageLoader=new ImageLoader(context);
         fileLoader=new FileLoader(context,imageLoader);
+        if(images != null) {
+            initImageMap();
+            difference = calculateDifference();
+        }
     }
 
     @Override
@@ -44,9 +54,8 @@ public class GridViewAdapter extends BaseAdapter {
             if(images == null){
                 return fc.getFileSize();
             }else{
-                initImageMap();
                 return images.size()>fc.getFileSize() ?
-                        images.size() : images.size()+calculateDifference();
+                        images.size() : images.size()+difference;
             }
     }
 

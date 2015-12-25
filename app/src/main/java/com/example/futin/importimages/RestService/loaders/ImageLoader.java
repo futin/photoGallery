@@ -33,19 +33,19 @@ import java.util.concurrent.Executors;
 
 public class ImageLoader {
 
-    public MemoryCache memoryCache ;
+    public MemoryCache memoryCache;
     Context context;
     FileCache fileCache;
     private Map<ImageView, String> imageViews = Collections
             .synchronizedMap(new WeakHashMap<ImageView, String>());
     ExecutorService executorService;
     // Handler to display images in UI thread
-    Handler handler = new Handler();
-
+    Handler handler;
     public ImageLoader(Context context) {
         this.context=context;
         fileCache = new FileCache(context);
         memoryCache = new MemoryCache();
+        handler=new Handler();
         executorService = Executors.newFixedThreadPool(5);
     }
 
