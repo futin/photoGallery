@@ -1,6 +1,7 @@
 package com.example.futin.importimages.UserInterface;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ public class GridViewAdapter extends BaseAdapter {
     Context context;
     LayoutInflater inflater;
     ArrayList<Image> images;
+    ArrayList<String>combineImages;
     ImageLoader imageLoader;
     FileCache fc;
     FileLoader fileLoader;
@@ -43,6 +45,7 @@ public class GridViewAdapter extends BaseAdapter {
         fc=new FileCache(context);
         imageLoader=new ImageLoader(context);
         fileLoader=new FileLoader(context,imageLoader);
+
         if(images != null) {
             initImageMap();
             difference = calculateDifference();
@@ -51,12 +54,7 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-            if(images == null){
-                return fc.getFileSize();
-            }else{
-                return images.size()>fc.getFileSize() ?
-                        images.size() : images.size()+difference;
-            }
+       return calculateSizeOfGallery();
     }
 
     @Override
@@ -66,7 +64,7 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return 0;
+       return 0;
     }
 
     @Override
@@ -81,6 +79,7 @@ public class GridViewAdapter extends BaseAdapter {
         }else{
             loadFromDisc(myImage,i);
         }
+        itemView.setOnClickListener(new OnImageClickListener(i));
         return itemView;
     }
     /*
@@ -90,7 +89,6 @@ public class GridViewAdapter extends BaseAdapter {
     void loadFromDisc(ImageView image, int i){
         File file=fc.getFiles()[i];
         fileLoader.queuePhoto(file,image);
-
         if(images != null) {
             if (imageMap.containsKey(file.getName())) {
                 imageMap.remove(file.getName());
@@ -132,14 +130,51 @@ public class GridViewAdapter extends BaseAdapter {
     */
     private int calculateDifference(){
         int total=0;
+        combineImages=new ArrayList<>();
+        for(Map.Entry<String, String> e: imageMap.entrySet()){
+            combineImages.add(e.getValue());
+        }
         if(images != null && fc != null){
             for(File file : fc.getFiles()) {
                 if(!imageMap.containsKey(String.valueOf(file.getName()))){
                     total++;
+                    combineImages.add((String.valueOf(file.getName())));
                 }
             }
         }
         return total;
+    }
+    /*
+        Calculation for getCount method
+    */
+    int calculateSizeOfGallery(){
+        if(images == null){
+            return fc.getFileSize();
+        }else{
+            return images.size()>fc.getFileSize() ?
+                    images.size() : combineImages.size();
+        }
+    }
+
+    class OnImageClickListener implements View.OnClickListener {
+
+        int position;
+
+        // constructor
+        public OnImageClickListener(int position) {
+            this.position = position;
+            ListHolder.getInstance().setAllLists(images,combineImages,fc.getFiles());
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            // on selecting grid view image
+            // launch full screen activity
+            Intent i = new Intent(context, SingleImageFragment.class);
+            i.putExtra("position", position);
+            context.startActivity(i);
+        }
     }
 
 }

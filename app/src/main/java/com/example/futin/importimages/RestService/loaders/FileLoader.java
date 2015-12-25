@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.widget.ImageView;
 
+import com.example.futin.importimages.R;
 import com.example.futin.importimages.UserInterface.animation.MyAnimation;
 
 import java.io.File;
@@ -94,7 +95,7 @@ public class FileLoader {
                 return;
             if (bitmap != null) {
                 photoToLoad.imageView.setImageBitmap(bitmap);
-                new MyAnimation().setAnimation(context, photoToLoad.imageView, 800);
+                new MyAnimation().setAnimationRandom(context, photoToLoad.imageView, 800, R.anim.fade_in_and_scale);
             }
         }
     }
