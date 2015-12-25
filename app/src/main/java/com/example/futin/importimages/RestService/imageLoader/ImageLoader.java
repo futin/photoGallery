@@ -97,17 +97,9 @@ public class ImageLoader {
             return null;
         }
     }
-    public Bitmap getBitmapFromFile(File file){
-        Bitmap b = decodeFile(file);
-        if (b != null)
-            return b;
-        else{
-            return null;
-        }
-    }
 
     // Decodes image and scales it to reduce memory consumption
-    private Bitmap decodeFile(File f) {
+    public Bitmap decodeFile(File f) {
         try {
             // Decode image size
             BitmapFactory.Options o = new BitmapFactory.Options();

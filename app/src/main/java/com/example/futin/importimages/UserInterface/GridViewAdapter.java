@@ -1,7 +1,6 @@
 package com.example.futin.importimages.UserInterface;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +9,9 @@ import android.widget.ImageView;
 
 import com.example.futin.importimages.R;
 import com.example.futin.importimages.RestService.imageLoader.FileCache;
+import com.example.futin.importimages.RestService.imageLoader.FileLoader;
 import com.example.futin.importimages.RestService.imageLoader.ImageLoader;
 import com.example.futin.importimages.RestService.models.Image;
-import com.example.futin.importimages.UserInterface.animation.MyAnimation;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,6 +28,7 @@ public class GridViewAdapter extends BaseAdapter {
     ArrayList<Image> images;
     ImageLoader imageLoader;
     FileCache fc;
+    FileLoader fileLoader;
 
     Map<String, String> imageMap;
     public GridViewAdapter(Context context, ArrayList<Image> images) {
@@ -36,6 +36,7 @@ public class GridViewAdapter extends BaseAdapter {
         this.images = images;
         fc=new FileCache(context);
         imageLoader=new ImageLoader(context);
+        fileLoader=new FileLoader(context,imageLoader);
     }
 
     @Override
@@ -75,9 +76,10 @@ public class GridViewAdapter extends BaseAdapter {
 
     void loadFromDisc(ImageView image, int i){
         File file=fc.getFiles()[i];
-        Bitmap b=imageLoader.getBitmapFromFile(file);
-        image.setImageBitmap(b);
-        new MyAnimation().setAnimation(context,image,800);
+        fileLoader.queuePhoto(file,image);
+       // Bitmap b=imageLoader.getBitmapFromFile(file);
+      //  image.setImageBitmap(b);
+      //  new MyAnimation().setAnimation(context,image,800);
 
         if(images != null) {
             if (imageMap.containsKey(file.getName())) {
