@@ -45,7 +45,8 @@ public class GridViewAdapter extends BaseAdapter {
                 return fc.getFileSize();
             }else{
                 initImageMap();
-                return images.size();
+                return images.size()>=fc.getFileSize() ?
+                        images.size() : images.size()+fc.getFileSize();
             }
     }
 
