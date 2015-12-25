@@ -45,10 +45,11 @@ public class GridViewAdapter extends BaseAdapter {
                 return fc.getFileSize();
             }else{
                 initImageMap();
-                return images.size()>=fc.getFileSize() ?
-                        images.size() : images.size()+fc.getFileSize();
+                return images.size()>fc.getFileSize() ?
+                        images.size() : images.size()+calculateDifference();
             }
     }
+
     @Override
     public Object getItem(int i) {
         return null;
@@ -104,4 +105,16 @@ public class GridViewAdapter extends BaseAdapter {
                 imageMap.put(String.valueOf(img.getUrl().hashCode()),String.valueOf(img.getUrl().hashCode()));
         }
     }
+    private int calculateDifference(){
+        int total=0;
+        if(images != null && fc != null){
+            for(File file : fc.getFiles()) {
+                if(!imageMap.containsKey(String.valueOf(file.getName()))){
+                    total++;
+                }
+            }
+        }
+        return total;
+    }
+
 }
