@@ -82,8 +82,10 @@ public class ListHolder {
     }
 
     void clear(){
-        images.clear();
-        combineImages.clear();
+        if(images != null && combineImages != null) {
+            images.clear();
+            combineImages.clear();
+        }
         listOfFiles.clear();
         webUrls.clear();
     }

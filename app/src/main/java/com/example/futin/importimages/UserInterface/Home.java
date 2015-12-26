@@ -15,6 +15,7 @@ import com.example.futin.importimages.RestService.listeners.AsyncTaskListener;
 import com.example.futin.importimages.RestService.models.Image;
 import com.example.futin.importimages.RestService.response.RSGetImagesResponse;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 
@@ -25,13 +26,14 @@ public class Home extends Activity implements AsyncTaskListener{
     GridView gridView;
     GridViewAdapter gridViewAdapter;
     int backCounter=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         gridView= (GridView) findViewById(R.id.grid_view);
 
-        if(!isOnline()){
+        if(!isMobileDataEnabled()){
             initAdapter(null);
         }else{
             rs = new RestService(this);
@@ -60,7 +62,7 @@ public class Home extends Activity implements AsyncTaskListener{
     @Override
     public void onBackPressed() {
         backCounter++;
-        if (backCounter==2){
+        if (backCounter == 2){
             backCounter=0;
             this.finish();
             ListHolder.getInstance().clear();
@@ -82,7 +84,8 @@ public class Home extends Activity implements AsyncTaskListener{
     public void makeToast(String text){
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
-    /* check for mobile data
+
+
     boolean isMobileDataEnabled(){
         boolean mobileDataEnabled = false; // Assume disabled
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -97,6 +100,6 @@ public class Home extends Activity implements AsyncTaskListener{
         }
         return mobileDataEnabled;
     }
-    */
+    
 
 }

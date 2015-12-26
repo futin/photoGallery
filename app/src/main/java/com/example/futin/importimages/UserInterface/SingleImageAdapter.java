@@ -64,4 +64,5 @@ public class SingleImageAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
+
 }
