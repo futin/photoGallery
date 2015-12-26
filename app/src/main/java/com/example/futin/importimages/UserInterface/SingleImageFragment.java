@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
 import com.example.futin.importimages.R;
+import com.facebook.FacebookSdk;
 
 /**
  * Created by Futin on 12/25/2015.
@@ -20,6 +21,7 @@ public class SingleImageFragment extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pager_layout);
         viewPager= (ViewPager) findViewById(R.id.pager);
+        FacebookSdk.sdkInitialize(this);
 
     }
 

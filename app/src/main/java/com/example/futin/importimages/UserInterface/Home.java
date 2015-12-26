@@ -2,6 +2,7 @@ package com.example.futin.importimages.UserInterface;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public class Home extends Activity implements AsyncTaskListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         gridView= (GridView) findViewById(R.id.grid_view);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         if(!isMobileDataEnabled()){
             initAdapter(null);
@@ -100,6 +102,25 @@ public class Home extends Activity implements AsyncTaskListener{
         }
         return mobileDataEnabled;
     }
-    
+/*
+    void test(){
+        PackageInfo info;
+        try {
+            info = getPackageManager().getPackageInfo("com.example.futin.importimages", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md;
+                md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String something = new String(Base64.encode(md.digest(), 0));
+                //String something = new String(Base64.encodeBytes(md.digest()));
+                Log.e("hash key", something);
+            }
+        }  catch (NoSuchAlgorithmException e) {
+            Log.e("no such an algorithm", e.toString());
+        } catch (Exception e) {
+            Log.e("exception", e.toString());
+        }
+    }
+*/
 
 }

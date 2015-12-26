@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.futin.importimages"
-        minSdkVersion 12
+        minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -24,6 +24,7 @@ android {
         exclude 'META-INF/notice.txt'
     }
 }
+repositories { mavenCentral() }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -32,5 +33,5 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-core:2.4.4'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.4.4'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.4.4'
-
+    compile 'com.facebook.android:facebook-android-sdk:4.6.0'
 }

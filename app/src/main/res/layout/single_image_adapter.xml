@@ -12,7 +12,15 @@
         android:layout_marginTop="50dp"
         android:background="@drawable/image_border"
         android:scaleType="fitXY"
-
         />
+    <com.facebook.share.widget.ShareButton
+        android:id="@+id/shareButton"
+        android:layout_width="75dp"
+        android:layout_height="35dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/singleImageView"
+        android:layout_alignStart="@+id/singleImageView"
+        android:layout_marginBottom="32dp" />
+
 
 </RelativeLayout>
