@@ -43,9 +43,11 @@ public class SingleImageAdapter extends PagerAdapter {
         myImage= (ImageView) viewLayout.findViewById(R.id.singleImageView);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
         String fileName=ListHolder.getInstance().returnFileName(position);
         String AbsolutefilePath=ListHolder.getInstance().getFilePath();
         String filePath=AbsolutefilePath.substring(0,AbsolutefilePath.lastIndexOf('/')+1);
+
         Bitmap bitmap = BitmapFactory.decodeFile(filePath+fileName);
         myImage.setImageBitmap(bitmap);
         new MyAnimation().setAnimation(context,myImage,400,R.anim.fade_in);

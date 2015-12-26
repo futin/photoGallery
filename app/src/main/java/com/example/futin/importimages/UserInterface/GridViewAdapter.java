@@ -33,8 +33,6 @@ public class GridViewAdapter extends BaseAdapter {
     FileLoader fileLoader;
     Map<String, String> imageMap;
 
-    int difference=0;
-
     public GridViewAdapter(Context context, ArrayList<Image> images) {
         this.context = context;
         this.images = images;
@@ -45,10 +43,10 @@ public class GridViewAdapter extends BaseAdapter {
         fc=new FileCache(context);
         imageLoader=new ImageLoader(context);
         fileLoader=new FileLoader(context,imageLoader);
-
+        ListHolder.getInstance().setFiles(fc.getFiles());
         if(images != null) {
             initImageMap();
-            difference = calculateDifference();
+            calculateDifference();
         }
     }
 
@@ -111,6 +109,7 @@ public class GridViewAdapter extends BaseAdapter {
         if(!url.equalsIgnoreCase("")) {
             imageLoader.DisplayImage(url, myImage);
             imageMap.remove(String.valueOf(url.hashCode()));
+            ListHolder.getInstance().addToWeb(String.valueOf(url.hashCode()));
         }
     }
     /*
@@ -128,8 +127,7 @@ public class GridViewAdapter extends BaseAdapter {
         add that difference in photo gallery, so we can see both images that we do not have from the
         web, and our already downloaded images
     */
-    private int calculateDifference(){
-        int total=0;
+    private void calculateDifference(){
         combineImages=new ArrayList<>();
         for(Map.Entry<String, String> e: imageMap.entrySet()){
             combineImages.add(e.getValue());
@@ -137,12 +135,10 @@ public class GridViewAdapter extends BaseAdapter {
         if(images != null && fc != null){
             for(File file : fc.getFiles()) {
                 if(!imageMap.containsKey(String.valueOf(file.getName()))){
-                    total++;
                     combineImages.add((String.valueOf(file.getName())));
                 }
             }
         }
-        return total;
     }
     /*
         Calculation for getCount method
@@ -163,8 +159,7 @@ public class GridViewAdapter extends BaseAdapter {
         // constructor
         public OnImageClickListener(int position) {
             this.position = position;
-            ListHolder.getInstance().setAllLists(images,combineImages,fc.getFiles());
-
+            ListHolder.getInstance().setAllLists(images,combineImages);
         }
 
         @Override

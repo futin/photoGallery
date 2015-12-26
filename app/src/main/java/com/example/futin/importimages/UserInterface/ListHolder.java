@@ -12,6 +12,7 @@ public class ListHolder {
     ArrayList<Image> images;
     ArrayList<String>combineImages;
     ArrayList<String>listOfFiles;
+    ArrayList<String>webUrls=new ArrayList<>();
     File[] files;
 
     private static ListHolder instance;
@@ -22,36 +23,10 @@ public class ListHolder {
         return instance;
     }
 
-    public ArrayList<Image> getImages() {
-        return images;
-    }
-
-    public void setImages(ArrayList<Image> images) {
-        this.images = images;
-    }
-
-    public ArrayList<String> getCombineImages() {
-        return combineImages;
-    }
-
-    public void setCombineImages(ArrayList<String> combineImages) {
-        this.combineImages = combineImages;
-    }
-
-    public ArrayList<String> getListOfFiles() {
-        return listOfFiles;
-    }
-
-    public void setListOfFiles(ArrayList<String> listOfFiles) {
-        this.listOfFiles = listOfFiles;
-    }
-
-    public void setAllLists(ArrayList<Image> images, ArrayList<String>combineImages,
-                            File[] files){
+    public void setAllLists(ArrayList<Image> images, ArrayList<String>combineImages
+                            ){
         this.images=images;
         this.combineImages=combineImages;
-        this.files=files;
-        convertFilesToList();
     }
 
     void convertFilesToList(){
@@ -60,19 +35,24 @@ public class ListHolder {
             listOfFiles.add(f.getName());
     }
 
-    public void clearLists(){
-        images.clear();
-        combineImages.clear();
-        listOfFiles.clear();
+    public void setFiles(File[] files) {
+        this.files = files;
+        convertFilesToList();
+    }
+
+    public void addToWeb(String url){
+        if(!webUrls.contains(url))
+            webUrls.add(url);
     }
 
     String returnFileName(int position){
-        if(images == null){
+        if(images == null || position < listOfFiles.size()){
             return listOfFiles.get(position);
         }else{
-            return images.size()>listOfFiles.size() ?
-                    String.valueOf(images.get(position)) : combineImages.get(position);
+            if(webUrls.size()>(position-listOfFiles.size()))
+            return webUrls.get(position-listOfFiles.size());
         }
+        return null;
     }
     String getFilePath(){
         String path="";
