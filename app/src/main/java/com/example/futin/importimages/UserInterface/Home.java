@@ -5,7 +5,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.example.futin.importimages.R;
 import com.example.futin.importimages.RestService.RestService;
@@ -22,7 +24,7 @@ public class Home extends Activity implements AsyncTaskListener{
     RSGetImagesResponse response;
     GridView gridView;
     GridViewAdapter gridViewAdapter;
-
+    int backCounter=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +57,31 @@ public class Home extends Activity implements AsyncTaskListener{
         return netInfo != null && netInfo.isConnected();
     }
 
+    @Override
+    public void onBackPressed() {
+        backCounter++;
+        if (backCounter==2){
+            backCounter=0;
+            this.finish();
+            ListHolder.getInstance().clear();
+            super.onBackPressed();
+        }else{
+            makeToast("Press one more time to exit");
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    backCounter=0;
+                }
+            },2000);
+        }
+    }
+
+    /*
+        Simple method for showing messages
+    */
+    public void makeToast(String text){
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    }
     /* check for mobile data
     boolean isMobileDataEnabled(){
         boolean mobileDataEnabled = false; // Assume disabled

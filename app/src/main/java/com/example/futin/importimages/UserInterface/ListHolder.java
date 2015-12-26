@@ -10,11 +10,16 @@ import java.util.ArrayList;
  */
 public class ListHolder {
     ArrayList<Image> images;
+    //list with both disc and web images
     ArrayList<String>combineImages;
+    //list of images from disc
     ArrayList<String>listOfFiles;
+    //list of images from web
     ArrayList<String>webUrls=new ArrayList<>();
     File[] files;
-
+    /*
+        Singleton class, designed for list manipulation, end sending data between activities
+    */
     private static ListHolder instance;
 
     public static ListHolder getInstance(){
@@ -54,6 +59,9 @@ public class ListHolder {
         }
         return null;
     }
+    /*
+        Method for getting absolute path to our humanityFiles directory
+    */
     String getFilePath(){
         String path="";
         if(files != null && files.length>0){
@@ -61,8 +69,6 @@ public class ListHolder {
         }
         return path;
     }
-
-
     /*
           Calculation for getCount method
       */
@@ -73,4 +79,13 @@ public class ListHolder {
             return images.size()>listOfFiles.size() ?
                     images.size() : combineImages.size();
         }
-    }}
+    }
+
+    void clear(){
+        images.clear();
+        combineImages.clear();
+        listOfFiles.clear();
+        webUrls.clear();
+    }
+
+}
