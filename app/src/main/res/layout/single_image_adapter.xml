@@ -22,5 +22,15 @@
         android:layout_alignStart="@+id/singleImageView"
         android:layout_marginBottom="32dp" />
 
+    <Button
+        android:layout_width="75dp"
+        android:layout_height="35dp"
+        android:text="Delete"
+        android:id="@+id/btnDelete"
+        android:layout_alignTop="@+id/shareButton"
+        android:layout_alignRight="@+id/singleImageView"
+        android:layout_alignEnd="@+id/singleImageView"
+        android:textSize="12dp" />
+
 
 </RelativeLayout>

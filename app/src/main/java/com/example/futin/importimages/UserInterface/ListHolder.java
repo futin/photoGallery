@@ -50,14 +50,14 @@ public class ListHolder {
             webUrls.add(url);
     }
 
+    public void addToFiles(String url){
+        if(!listOfFiles.contains(url))
+            listOfFiles.add(url);
+    }
+
     String returnFileName(int position){
-        if(images == null || position < listOfFiles.size()){
-            return listOfFiles.get(position);
-        }else{
-            if(webUrls.size()>(position-listOfFiles.size()))
-            return webUrls.get(position-listOfFiles.size());
-        }
-        return null;
+
+        return listOfFiles.get(position);
     }
     /*
         Method for getting absolute path to our humanityFiles directory
@@ -70,15 +70,10 @@ public class ListHolder {
         return path;
     }
     /*
-          Calculation for getCount method
-      */
+        Calculation for getCount method
+    */
     int calculateSizeOfGallery(){
-        if(images == null){
             return listOfFiles.size();
-        }else{
-            return images.size()>listOfFiles.size() ?
-                    images.size() : combineImages.size();
-        }
     }
 
     void clear(){
@@ -88,6 +83,16 @@ public class ListHolder {
         }
         listOfFiles.clear();
         webUrls.clear();
+    }
+
+    public Object getCalculatedSizeList(){
+        if(images == null){
+            return listOfFiles;
+        }else{
+            return images.size()>listOfFiles.size() ?
+                    images : combineImages;
+        }
+
     }
 
 }

@@ -34,7 +34,6 @@ public class Home extends Activity implements AsyncTaskListener{
         setContentView(R.layout.activity_home);
         gridView= (GridView) findViewById(R.id.grid_view);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         if(!isMobileDataEnabled()){
             initAdapter(null);
         }else{
@@ -121,6 +120,6 @@ public class Home extends Activity implements AsyncTaskListener{
             Log.e("exception", e.toString());
         }
     }
-*/
 
+*/
 }

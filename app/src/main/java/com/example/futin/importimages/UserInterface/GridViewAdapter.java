@@ -109,7 +109,9 @@ public class GridViewAdapter extends BaseAdapter {
         if(!url.equalsIgnoreCase("")) {
             imageLoader.DisplayImage(url, myImage);
             imageMap.remove(String.valueOf(url.hashCode()));
-            ListHolder.getInstance().addToWeb(String.valueOf(url.hashCode()));
+            ListHolder.getInstance().addToFiles(String.valueOf(url.hashCode()));
+            //ListHolder.getInstance().addToWeb(String.valueOf(url.hashCode()));
+
         }
     }
     /*

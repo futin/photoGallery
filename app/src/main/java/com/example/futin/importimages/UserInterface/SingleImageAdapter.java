@@ -7,11 +7,13 @@ import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.futin.importimages.R;
+import com.example.futin.importimages.RestService.listeners.ListChangeListener;
 import com.example.futin.importimages.UserInterface.animation.MyAnimation;
-import com.facebook.share.ShareApi;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareButton;
@@ -22,8 +24,11 @@ import com.facebook.share.widget.ShareButton;
 public class SingleImageAdapter extends PagerAdapter {
     Context context;
     LayoutInflater inflater;
-    public SingleImageAdapter(Context context) {
+    ListChangeListener listener;
+
+    public SingleImageAdapter(Context context,ListChangeListener listener) {
         this.context=context;
+        this.listener=listener;
     }
 
     @Override
@@ -37,13 +42,20 @@ public class SingleImageAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(final ViewGroup container, int position) {
         final ImageView myImage;
+        Button btnDelete;
+
         inflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View viewLayout = inflater.inflate(R.layout.single_image_adapter, container,
                 false);
         myImage= (ImageView) viewLayout.findViewById(R.id.singleImageView);
         ShareButton shareButton= (ShareButton) viewLayout.findViewById(R.id.shareButton);
+        btnDelete= (Button) viewLayout.findViewById(R.id.btnDelete);
+
+        final int deletePosition=position;
+
+
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
@@ -51,7 +63,8 @@ public class SingleImageAdapter extends PagerAdapter {
         String AbsolutefilePath=ListHolder.getInstance().getFilePath();
         String filePath=AbsolutefilePath.substring(0,AbsolutefilePath.lastIndexOf('/')+1);
 
-        final Bitmap bitmap = BitmapFactory.decodeFile(filePath+fileName);
+
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath+fileName);
         myImage.setImageBitmap(bitmap);
         new MyAnimation().setAnimation(context,myImage,400,R.anim.fade_in);
         container.addView(viewLayout);
@@ -68,6 +81,9 @@ public class SingleImageAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
+    public void destroyView(ViewGroup container, int position) {
+        notifyDataSetChanged();
+    }
     /*
         Method used for sharing single photo on Facebook
     */
@@ -78,9 +94,15 @@ public class SingleImageAdapter extends PagerAdapter {
         SharePhotoContent content = new SharePhotoContent.Builder()
                 .addPhoto(photo)
                 .build();
-        ShareApi.share(content,null);
         return content;
     }
 
+    void makeToast(String text){
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public int getItemPosition(Object object){
+        return PagerAdapter.POSITION_NONE;
+    }
 
 }
