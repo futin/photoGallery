@@ -55,6 +55,10 @@ public class GridViewAdapter extends BaseAdapter {
         sizeOfGallery=calculateSizeOfGallery();
     }
 
+    public void setFileSize(int size){
+        fileSize=size;
+    }
+
     @Override
     public int getCount() {
        return sizeOfGallery;
@@ -78,7 +82,7 @@ public class GridViewAdapter extends BaseAdapter {
         View itemView = inflater.inflate(R.layout.single_image, viewGroup, false);
         myImage = (ImageView) itemView.findViewById(R.id.imageView);
             if (i >= fileSize && images != null) {
-                loadFromWeb(myImage);
+                loadFromWeb(myImage, i);
             } else {
                 loadFromDisc(myImage, i);
             }
@@ -93,7 +97,9 @@ public class GridViewAdapter extends BaseAdapter {
     */
     void loadFromDisc(ImageView image, int i){
         File file=fc.getFiles()[i];
+        ListHolder.getInstance().addToFiles(file.getName());
         fileLoader.queuePhoto(file,image);
+
         if(images != null) {
             if (imageMap.containsKey(file.getName())) {
                 imageMap.remove(file.getName());
@@ -105,20 +111,24 @@ public class GridViewAdapter extends BaseAdapter {
         and take Bitmaps if any, otherwise put them in queue for loading from internet and,
         then decode and scale them to reduce memory consumption
     */
-    void loadFromWeb(ImageView myImage){
-        String url="";
-        for(Image img : images){
-            if(imageMap.containsKey(String.valueOf(img.getUrl().hashCode()))){
-                url=img.getUrl();
-                break;
+    void loadFromWeb(ImageView myImage, int position){
+        if(fileSize == 0){
+            imageLoader.DisplayImage(images.get(position).getUrl(), myImage);
+            ListHolder.getInstance().addToFiles(String.valueOf(images.get(position)
+                    .getUrl().hashCode()));
+        }else{
+            String url="";
+            for(Image img : images){
+                if(imageMap.containsKey(String.valueOf(img.getUrl().hashCode()))){
+                    url=img.getUrl();
+                    break;
+                }
             }
-        }
-        if(!url.equalsIgnoreCase("")) {
-            imageLoader.DisplayImage(url, myImage);
-            imageMap.remove(String.valueOf(url.hashCode()));
-            ListHolder.getInstance().addToFiles(String.valueOf(url.hashCode()));
-            ListHolder.getInstance().setAllLists(images,combineImages);
-
+            if(!url.equalsIgnoreCase("")) {
+                imageLoader.DisplayImage(url, myImage);
+                imageMap.remove(String.valueOf(url.hashCode()));
+                ListHolder.getInstance().addToFiles(String.valueOf(url.hashCode()));
+            }
         }
     }
     /*
@@ -172,6 +182,8 @@ public class GridViewAdapter extends BaseAdapter {
         // constructor
         public OnImageClickListener(int position) {
             this.position = position;
+            ListHolder.getInstance().setAllLists(images,combineImages);
+
         }
 
         @Override

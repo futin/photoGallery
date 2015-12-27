@@ -34,8 +34,10 @@ public class ListHolder {
     }
 
     public void notifyGrid(){
-        grid.notifyDataSetChanged();
+        grid.setFileSize(fileDir.getFileSize());
         grid.reduceList();
+        listOfFiles.clear();
+        grid.notifyDataSetChanged();
     }
 
     public void setAllLists(ArrayList<Image> images, ArrayList<String>combineImages

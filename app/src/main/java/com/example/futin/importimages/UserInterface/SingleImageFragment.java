@@ -33,7 +33,6 @@ public class SingleImageFragment extends Activity implements ListChangeListener 
         int position = i.getIntExtra("position", 0);
         SingleImageAdapter adapter = new SingleImageAdapter(this);
         viewPager.setAdapter(adapter);
-
         viewPager.setCurrentItem(position);
 
     }

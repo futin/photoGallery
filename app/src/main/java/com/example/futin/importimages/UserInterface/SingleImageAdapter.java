@@ -27,15 +27,16 @@ public class SingleImageAdapter extends PagerAdapter {
     Context context;
     LayoutInflater inflater;
     ListChangeListener listener;
-
+    int listSize=0;
     public SingleImageAdapter(Context context) {
         this.context=context;
         listener= (ListChangeListener) context;
+        listSize=ListHolder.getInstance().calculateSizeOfGallery();
     }
 
     @Override
     public int getCount() {
-        return ListHolder.getInstance().calculateSizeOfGallery();
+        return listSize;
     }
 
     @Override
@@ -71,6 +72,7 @@ public class SingleImageAdapter extends PagerAdapter {
                 boolean isDeleted = file.delete();
                 if (isDeleted) {
                     makeToast("Image deleted");
+                    listSize--;
                     ListHolder.getInstance().removeFileFromList(position, SingleImageAdapter.this, container);
                     notifyDataSetChanged();
                     ListHolder.getInstance().notifyGrid();
