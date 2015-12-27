@@ -26,9 +26,9 @@ public class SingleImageAdapter extends PagerAdapter {
     LayoutInflater inflater;
     ListChangeListener listener;
 
-    public SingleImageAdapter(Context context,ListChangeListener listener) {
+    public SingleImageAdapter(Context context) {
         this.context=context;
-        this.listener=listener;
+        listener= (ListChangeListener) context;
     }
 
     @Override
