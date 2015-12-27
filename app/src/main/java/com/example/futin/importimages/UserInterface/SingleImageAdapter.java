@@ -36,6 +36,9 @@ public class SingleImageAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
+        if(listSize == 0){
+            listener.closeViewPager();
+        }
         return listSize;
     }
 
@@ -97,9 +100,6 @@ public class SingleImageAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
-    public void destroyView(ViewGroup container, int position) {
-        notifyDataSetChanged();
-    }
     /*
         Method used for sharing single photo on Facebook
     */

@@ -37,8 +37,10 @@ public class SingleImageFragment extends Activity implements ListChangeListener 
 
     }
 
-    @Override
-    public void dataChanged(Object obj) {
 
+
+    @Override
+    public void closeViewPager() {
+        finish();
     }
 }

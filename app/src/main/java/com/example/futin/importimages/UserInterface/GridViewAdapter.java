@@ -99,7 +99,6 @@ public class GridViewAdapter extends BaseAdapter {
         File file=fc.getFiles()[i];
         ListHolder.getInstance().addToFiles(file.getName());
         fileLoader.queuePhoto(file,image);
-
         if(images != null) {
             if (imageMap.containsKey(file.getName())) {
                 imageMap.remove(file.getName());
