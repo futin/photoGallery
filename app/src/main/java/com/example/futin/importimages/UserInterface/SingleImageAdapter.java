@@ -18,6 +18,8 @@ import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareButton;
 
+import java.io.File;
+
 /**
  * Created by Futin on 12/25/2015.
  */
@@ -42,7 +44,7 @@ public class SingleImageAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(final ViewGroup container, int position) {
+    public Object instantiateItem(final ViewGroup container, final int position) {
         final ImageView myImage;
         Button btnDelete;
 
@@ -53,18 +55,30 @@ public class SingleImageAdapter extends PagerAdapter {
         ShareButton shareButton= (ShareButton) viewLayout.findViewById(R.id.shareButton);
         btnDelete= (Button) viewLayout.findViewById(R.id.btnDelete);
 
-        final int deletePosition=position;
 
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
         String fileName=ListHolder.getInstance().returnFileName(position);
-        String AbsolutefilePath=ListHolder.getInstance().getFilePath();
-        String filePath=AbsolutefilePath.substring(0,AbsolutefilePath.lastIndexOf('/')+1);
+        String AbsolutefilePath=ListHolder.getInstance().getFilePath()+'/';
+        final String deleteFileFromPath=AbsolutefilePath+fileName;
 
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                File file = new File(deleteFileFromPath);
+                boolean isDeleted = file.delete();
+                if (isDeleted) {
+                    makeToast("Image deleted");
+                    ListHolder.getInstance().removeFileFromList(position, SingleImageAdapter.this, container);
+                    notifyDataSetChanged();
+                    ListHolder.getInstance().notifyGrid();
+                }
+            }
+        });
 
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath+fileName);
+        Bitmap bitmap = BitmapFactory.decodeFile(AbsolutefilePath+fileName);
         myImage.setImageBitmap(bitmap);
         new MyAnimation().setAnimation(context,myImage,400,R.anim.fade_in);
         container.addView(viewLayout);

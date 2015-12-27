@@ -25,6 +25,9 @@ public class FileCache {
         if (!cacheDir.exists())
             cacheDir.mkdirs();
     }
+    public File getDirectory(){
+        return cacheDir;
+    }
     /*
         Since files are saved as hashCode on our disc, we need to extract that hashcode to create
         File

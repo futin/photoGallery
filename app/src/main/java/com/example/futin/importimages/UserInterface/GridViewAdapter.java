@@ -2,6 +2,7 @@ package com.example.futin.importimages.UserInterface;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,8 @@ public class GridViewAdapter extends BaseAdapter {
     FileCache fc;
     FileLoader fileLoader;
     Map<String, String> imageMap;
-
+    int sizeOfGallery=0;
+    int fileSize=0;
     public GridViewAdapter(Context context, ArrayList<Image> images) {
         this.context = context;
         this.images = images;
@@ -43,16 +45,19 @@ public class GridViewAdapter extends BaseAdapter {
         fc=new FileCache(context);
         imageLoader=new ImageLoader(context);
         fileLoader=new FileLoader(context,imageLoader);
-        ListHolder.getInstance().setFiles(fc.getFiles());
+        ListHolder.getInstance().setFileDir(fc);
+        ListHolder.getInstance().setGrid(this);
+        fileSize=fc.getFileSize();
         if(images != null) {
             initImageMap();
             calculateDifference();
         }
+        sizeOfGallery=calculateSizeOfGallery();
     }
 
     @Override
     public int getCount() {
-       return calculateSizeOfGallery();
+       return sizeOfGallery;
     }
 
     @Override
@@ -68,16 +73,18 @@ public class GridViewAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         ImageView myImage;
-        inflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View itemView=inflater.inflate(R.layout.single_image, viewGroup, false);
-        myImage= (ImageView) itemView.findViewById(R.id.imageView);
+        Log.i("","i="+i);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View itemView = inflater.inflate(R.layout.single_image, viewGroup, false);
+        myImage = (ImageView) itemView.findViewById(R.id.imageView);
+            if (i >= fileSize && images != null) {
+                loadFromWeb(myImage);
+            } else {
+                loadFromDisc(myImage, i);
+            }
 
-        if(i>=fc.getFileSize() && images != null){
-            loadFromWeb(myImage);
-        }else{
-            loadFromDisc(myImage,i);
-        }
         itemView.setOnClickListener(new OnImageClickListener(i));
+
         return itemView;
     }
     /*
@@ -110,7 +117,7 @@ public class GridViewAdapter extends BaseAdapter {
             imageLoader.DisplayImage(url, myImage);
             imageMap.remove(String.valueOf(url.hashCode()));
             ListHolder.getInstance().addToFiles(String.valueOf(url.hashCode()));
-            //ListHolder.getInstance().addToWeb(String.valueOf(url.hashCode()));
+            ListHolder.getInstance().setAllLists(images,combineImages);
 
         }
     }
@@ -154,6 +161,10 @@ public class GridViewAdapter extends BaseAdapter {
         }
     }
 
+    public void reduceList(){
+        sizeOfGallery--;
+    }
+
     class OnImageClickListener implements View.OnClickListener {
 
         int position;
@@ -161,7 +172,6 @@ public class GridViewAdapter extends BaseAdapter {
         // constructor
         public OnImageClickListener(int position) {
             this.position = position;
-            ListHolder.getInstance().setAllLists(images,combineImages);
         }
 
         @Override

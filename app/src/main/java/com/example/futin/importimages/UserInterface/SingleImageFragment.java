@@ -16,7 +16,6 @@ public class SingleImageFragment extends Activity implements ListChangeListener 
 
     private ViewPager viewPager;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

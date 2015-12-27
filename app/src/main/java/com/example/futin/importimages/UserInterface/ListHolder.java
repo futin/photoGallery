@@ -1,5 +1,8 @@
 package com.example.futin.importimages.UserInterface;
 
+import android.view.ViewGroup;
+
+import com.example.futin.importimages.RestService.cache.FileCache;
 import com.example.futin.importimages.RestService.models.Image;
 
 import java.io.File;
@@ -14,9 +17,8 @@ public class ListHolder {
     ArrayList<String>combineImages;
     //list of images from disc
     ArrayList<String>listOfFiles;
-    //list of images from web
-    ArrayList<String>webUrls=new ArrayList<>();
-    File[] files;
+    FileCache fileDir;
+    GridViewAdapter grid;
     /*
         Singleton class, designed for list manipulation, end sending data between activities
     */
@@ -27,6 +29,14 @@ public class ListHolder {
             instance=new ListHolder();
         return instance;
     }
+    public void setGrid(GridViewAdapter grid){
+        this.grid=grid;
+    }
+
+    public void notifyGrid(){
+        grid.notifyDataSetChanged();
+        grid.reduceList();
+    }
 
     public void setAllLists(ArrayList<Image> images, ArrayList<String>combineImages
                             ){
@@ -34,25 +44,33 @@ public class ListHolder {
         this.combineImages=combineImages;
     }
 
-    void convertFilesToList(){
-        listOfFiles=new ArrayList<>();
-        for(File f: files)
-            listOfFiles.add(f.getName());
+    public void removeFileFromList(int position, SingleImageAdapter adapter, ViewGroup container){
+        if(position<listOfFiles.size()){
+            listOfFiles.remove(position);
+        }else
+            adapter.finishUpdate(container);
     }
 
-    public void setFiles(File[] files) {
-        this.files = files;
+
+    public void setFileDir(FileCache file){
+        fileDir=file;
         convertFilesToList();
     }
 
-    public void addToWeb(String url){
-        if(!webUrls.contains(url))
-            webUrls.add(url);
+    void convertFilesToList(){
+        listOfFiles=new ArrayList<>();
+        if(fileDir.getFileSize()>0) {
+            for (File f : fileDir.getFiles())
+                listOfFiles.add(f.getName());
+        }
     }
 
     public void addToFiles(String url){
         if(!listOfFiles.contains(url))
             listOfFiles.add(url);
+    }
+    public ArrayList<String> getListOfFiles(){
+        return listOfFiles;
     }
 
     String returnFileName(int position){
@@ -63,11 +81,7 @@ public class ListHolder {
         Method for getting absolute path to our humanityFiles directory
     */
     String getFilePath(){
-        String path="";
-        if(files != null && files.length>0){
-            path=files[0].getAbsolutePath();
-        }
-        return path;
+        return fileDir.getDirectory().getAbsolutePath();
     }
     /*
         Calculation for getCount method
@@ -82,17 +96,7 @@ public class ListHolder {
             combineImages.clear();
         }
         listOfFiles.clear();
-        webUrls.clear();
     }
 
-    public Object getCalculatedSizeList(){
-        if(images == null){
-            return listOfFiles;
-        }else{
-            return images.size()>listOfFiles.size() ?
-                    images : combineImages;
-        }
-
-    }
 
 }
