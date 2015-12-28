@@ -15,22 +15,22 @@
         />
     <com.facebook.share.widget.ShareButton
         android:id="@+id/shareButton"
-        android:layout_width="75dp"
-        android:layout_height="35dp"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/singleImageView"
         android:layout_alignStart="@+id/singleImageView"
         android:layout_marginBottom="32dp" />
 
     <Button
-        android:layout_width="75dp"
-        android:layout_height="35dp"
+        android:layout_width="90dp"
+        android:layout_height="45dp"
         android:text="Delete"
         android:id="@+id/btnDelete"
-        android:layout_alignTop="@+id/shareButton"
+        android:textSize="12dp"
         android:layout_alignRight="@+id/singleImageView"
         android:layout_alignEnd="@+id/singleImageView"
-        android:textSize="12dp" />
+        android:layout_alignBottom="@+id/shareButton" />
 
 
 </RelativeLayout>
