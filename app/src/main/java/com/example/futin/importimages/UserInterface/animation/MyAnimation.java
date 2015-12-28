@@ -26,5 +26,4 @@ public class MyAnimation{
         image.startAnimation(myFadeInAnimation); //Set animation to your ImageView
     }
 
-
    }
