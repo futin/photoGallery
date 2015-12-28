@@ -23,14 +23,96 @@
         android:layout_marginBottom="32dp" />
 
     <Button
-        android:layout_width="90dp"
+        android:layout_width="80dp"
         android:layout_height="45dp"
         android:text="Delete"
         android:id="@+id/btnDelete"
         android:textSize="12dp"
         android:layout_alignRight="@+id/singleImageView"
         android:layout_alignEnd="@+id/singleImageView"
-        android:layout_alignBottom="@+id/shareButton" />
+        android:layout_alignBottom="@+id/shareButton"
+        />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="30dp"
+        android:layout_height="50dp"
+        android:id="@+id/btn_00"
+        android:layout_below="@+id/singleImageView"
+        android:layout_alignLeft="@+id/singleImageView"
+        android:layout_alignStart="@+id/singleImageView"
+        android:layout_marginTop="25dp"
+        android:layout_alignRight="@+id/shareButton"
+        android:layout_alignEnd="@+id/shareButton"
+        android:background="@drawable/button_shape"
+        android:visibility="invisible" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="30dp"
+        android:layout_height="50dp"
+        android:id="@+id/btn_10"
+        android:layout_below="@+id/btn_00"
+        android:layout_alignLeft="@+id/btn_00"
+        android:layout_alignStart="@+id/btn_00"
+        android:layout_alignRight="@+id/btn_00"
+        android:layout_alignEnd="@+id/btn_00"
+        android:background="@drawable/button_shape"
+        android:layout_marginTop="15dp"
+        android:visibility="invisible" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="30dp"
+        android:layout_height="50dp"
+        android:id="@+id/btn_01"
+        android:layout_above="@+id/btn_10"
+        android:layout_toRightOf="@+id/btn_00"
+        android:layout_marginLeft="15dp"
+        android:layout_toLeftOf="@+id/btnDelete"
+        android:layout_toStartOf="@+id/btnDelete"
+        android:background="@drawable/button_shape"
+        android:layout_marginRight="15dp"
+        android:visibility="invisible" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="30dp"
+        android:layout_height="50dp"
+        android:id="@+id/btn_11"
+        android:layout_alignBottom="@+id/btn_10"
+        android:layout_alignLeft="@+id/btn_01"
+        android:layout_alignStart="@+id/btn_01"
+        android:layout_alignRight="@+id/btn_01"
+        android:layout_alignEnd="@+id/btn_01"
+        android:background="@drawable/button_shape"
+        android:visibility="invisible" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="30dp"
+        android:layout_height="50dp"
+        android:id="@+id/btn_02"
+        android:background="@drawable/button_shape"
+        android:layout_alignTop="@+id/btn_01"
+        android:layout_alignRight="@+id/singleImageView"
+        android:layout_alignEnd="@+id/singleImageView"
+        android:layout_alignLeft="@+id/btnDelete"
+        android:layout_alignStart="@+id/btnDelete"
+        android:visibility="invisible" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="30dp"
+        android:layout_height="50dp"
+        android:id="@+id/btn_12"
+        android:layout_alignBottom="@+id/btn_11"
+        android:layout_toRightOf="@+id/btn_11"
+        android:layout_marginLeft="20dp"
+        android:layout_alignRight="@+id/btn_02"
+        android:layout_alignEnd="@+id/btn_02"
+        android:background="@drawable/button_shape"
+        android:visibility="invisible" />
 
 
 </RelativeLayout>

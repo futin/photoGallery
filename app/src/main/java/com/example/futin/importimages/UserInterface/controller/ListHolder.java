@@ -1,11 +1,14 @@
 package com.example.futin.importimages.UserInterface.controller;
 
+import android.support.v7.graphics.Palette;
+
 import com.example.futin.importimages.RestService.cache.FileCache;
 import com.example.futin.importimages.RestService.models.Image;
 import com.example.futin.importimages.UserInterface.adapters.GridViewAdapter;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by Futin on 12/25/2015.
@@ -19,6 +22,8 @@ public class ListHolder {
     ArrayList<String>listOfFiles;
     FileCache fileDir;
     GridViewAdapter grid;
+
+    Map<String, ArrayList<Palette.Swatch>> colorsMap;
     /*
         Singleton class, designed for list manipulation, end sending data between activities
     */
@@ -38,6 +43,22 @@ public class ListHolder {
         this.grid=grid;
     }
 
+    public void setFileDir(FileCache file){
+        fileDir=file;
+        convertFilesToList();
+    }
+    public void setColorsMap(Map<String, ArrayList<Palette.Swatch>> colorsMap){
+        this.colorsMap=colorsMap;
+    }
+    public Map<String, ArrayList<Palette.Swatch>> getColorsMap(){
+        return colorsMap;
+    }
+
+    public void addToFiles(String url){
+        if(!listOfFiles.contains(url))
+            listOfFiles.add(url);
+    }
+
     public void notifyGrid(){
         grid.notifyGrid(fileDir, true);
         resetFiles();
@@ -50,18 +71,10 @@ public class ListHolder {
         }
     }
 
-
-
     public void removeFileFromList(int position){
         if(position<listOfFiles.size()){
             listOfFiles.remove(position);
         }
-    }
-
-
-    public void setFileDir(FileCache file){
-        fileDir=file;
-        convertFilesToList();
     }
 
     void convertFilesToList(){
@@ -72,24 +85,18 @@ public class ListHolder {
         }
     }
 
-    public void addToFiles(String url){
-        if(!listOfFiles.contains(url))
-            listOfFiles.add(url);
-    }
-    public ArrayList<String> getListOfFiles(){
-        return listOfFiles;
-    }
-
     public String returnFileName(int position){
 
         return listOfFiles.get(position);
     }
+
     /*
         Method for getting absolute path to our humanityFiles directory
     */
     public String getFilePath(){
         return fileDir.getDirectory().getAbsolutePath();
     }
+
     /*
         Calculation for getCount method
     */
