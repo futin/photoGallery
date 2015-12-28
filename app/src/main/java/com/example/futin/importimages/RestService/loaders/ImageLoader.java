@@ -58,8 +58,8 @@ public class ImageLoader {
         if (bitmap != null){
             imageView.setImageBitmap(bitmap);
             // Class with method for setting animation, that takes context where should animation
-            // be displayed, imageView that displays that photo and random duration from [0,800)ms
-            new MyAnimation().setAnimationRandom(context,imageView,800,R.anim.fade_in_and_scale);
+            // be displayed, imageView that displays that photo and random duration from [0,500)ms
+            new MyAnimation().setAnimationRandom(context,imageView,500,R.anim.fade_in_and_scale);
         }
         else {
             queuePhoto(url, imageView);
@@ -201,7 +201,7 @@ public class ImageLoader {
                 return;
             if (bitmap != null) {
                 photoToLoad.imageView.setImageBitmap(bitmap);
-                new MyAnimation().setAnimationRandom(context, photoToLoad.imageView, 800, R.anim.fade_in_and_scale);
+                new MyAnimation().setAnimationRandom(context, photoToLoad.imageView, 500, R.anim.fade_in_and_scale);
             }
         }
     }

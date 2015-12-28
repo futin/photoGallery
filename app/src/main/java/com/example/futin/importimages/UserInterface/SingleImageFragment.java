@@ -15,7 +15,7 @@ import com.facebook.FacebookSdk;
 public class SingleImageFragment extends Activity implements ListChangeListener {
 
     private ViewPager viewPager;
-
+    SingleImageAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,14 +31,11 @@ public class SingleImageFragment extends Activity implements ListChangeListener 
 
         Intent i = getIntent();
         int position = i.getIntExtra("position", 0);
-        SingleImageAdapter adapter = new SingleImageAdapter(this);
+        adapter = new SingleImageAdapter(this);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position);
 
     }
-
-
-
     @Override
     public void closeViewPager() {
         finish();

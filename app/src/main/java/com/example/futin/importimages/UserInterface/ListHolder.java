@@ -1,7 +1,5 @@
 package com.example.futin.importimages.UserInterface;
 
-import android.view.ViewGroup;
-
 import com.example.futin.importimages.RestService.cache.FileCache;
 import com.example.futin.importimages.RestService.models.Image;
 
@@ -34,10 +32,14 @@ public class ListHolder {
     }
 
     public void notifyGrid(){
-        grid.setFileSize(fileDir.getFileSize());
-        grid.reduceList();
-        listOfFiles.clear();
+        grid.notifyGrid(fileDir.getFileSize(), true);
+        resetFiles();
         grid.notifyDataSetChanged();
+    }
+    void resetFiles(){
+        listOfFiles.clear();
+        for( File f : fileDir.getFiles())
+            listOfFiles.add(f.getName());
     }
 
     public void setAllLists(ArrayList<Image> images, ArrayList<String>combineImages
@@ -46,11 +48,10 @@ public class ListHolder {
         this.combineImages=combineImages;
     }
 
-    public void removeFileFromList(int position, SingleImageAdapter adapter, ViewGroup container){
+    public void removeFileFromList(int position){
         if(position<listOfFiles.size()){
             listOfFiles.remove(position);
-        }else
-            adapter.finishUpdate(container);
+        }
     }
 
 

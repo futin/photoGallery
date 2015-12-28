@@ -12,6 +12,8 @@ public class RSServerUrl {
    // private final static String API_ROOT_URL="/humanity";
 
     private final static String API_GET_IMAGES_URL="/getImages";
+    private final static String API_GET_BCG_IMAGES_URL="/getBcgImages";
+
 
     public String getBaseUrl(){
         return API_BASE_URL;
@@ -20,7 +22,7 @@ public class RSServerUrl {
         return getBaseUrl();
     }
 
-    public String getImagesUrl(){return getRootUrl()+API_GET_IMAGES_URL;}
+    public String getImagesUrl(){return getRootUrl()+API_GET_BCG_IMAGES_URL;}
 
 
 }

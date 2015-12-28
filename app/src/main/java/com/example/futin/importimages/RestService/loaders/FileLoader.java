@@ -60,8 +60,9 @@ public class FileLoader {
                 if (imageViewReused(photoToLoad))
                     return;
                 Bitmap bmp = getBitmapFromFile(photoToLoad.file);
-                if (imageViewReused(photoToLoad))
+                if (imageViewReused(photoToLoad)){
                     return;
+                }
                 BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
                 handler.post(bd);
             } catch (Throwable th) {
@@ -95,7 +96,7 @@ public class FileLoader {
                 return;
             if (bitmap != null) {
                 photoToLoad.imageView.setImageBitmap(bitmap);
-                new MyAnimation().setAnimationRandom(context, photoToLoad.imageView, 800, R.anim.fade_in_and_scale);
+                new MyAnimation().setAnimationRandom(context, photoToLoad.imageView, 500, R.anim.fade_in_and_scale);
             }
         }
     }

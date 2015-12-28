@@ -2,7 +2,6 @@ package com.example.futin.importimages.UserInterface;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +34,9 @@ public class GridViewAdapter extends BaseAdapter {
     Map<String, String> imageMap;
     int sizeOfGallery=0;
     int fileSize=0;
+
+    boolean deleteMode=false;
+
     public GridViewAdapter(Context context, ArrayList<Image> images) {
         this.context = context;
         this.images = images;
@@ -55,8 +57,10 @@ public class GridViewAdapter extends BaseAdapter {
         sizeOfGallery=calculateSizeOfGallery();
     }
 
-    public void setFileSize(int size){
+    public void notifyGrid(int size, boolean mode){
         fileSize=size;
+        deleteMode=mode;
+        reduceList();
     }
 
     @Override
@@ -77,18 +81,18 @@ public class GridViewAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         ImageView myImage;
-        Log.i("","i="+i);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(R.layout.single_image, viewGroup, false);
         myImage = (ImageView) itemView.findViewById(R.id.imageView);
+
             if (i >= fileSize && images != null) {
                 loadFromWeb(myImage, i);
+                if(fileSize > 0)
+                    fileSize++;
             } else {
                 loadFromDisc(myImage, i);
             }
-
         itemView.setOnClickListener(new OnImageClickListener(i));
-
         return itemView;
     }
     /*
@@ -96,10 +100,12 @@ public class GridViewAdapter extends BaseAdapter {
        threads and display them on main UI.
     */
     void loadFromDisc(ImageView image, int i){
-        File file=fc.getFiles()[i];
+        File file = fc.getFiles()[i];
+
         ListHolder.getInstance().addToFiles(file.getName());
-        fileLoader.queuePhoto(file,image);
-        if(images != null) {
+        fileLoader.queuePhoto(file, image);
+
+        if (images != null) {
             if (imageMap.containsKey(file.getName())) {
                 imageMap.remove(file.getName());
             }
@@ -162,7 +168,7 @@ public class GridViewAdapter extends BaseAdapter {
         Calculation for getCount method
     */
     int calculateSizeOfGallery(){
-        if(images == null){
+        if(images == null || deleteMode){
             return fc.getFileSize();
         }else{
             return images.size()>fc.getFileSize() ?
@@ -172,6 +178,9 @@ public class GridViewAdapter extends BaseAdapter {
 
     public void reduceList(){
         sizeOfGallery--;
+    }
+    public void resetFilesList(){
+
     }
 
     class OnImageClickListener implements View.OnClickListener {

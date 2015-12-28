@@ -48,7 +48,7 @@ public class RSGetImagesTask extends AsyncTask<Void, Void, RSGetImagesResponse> 
             String jsonText = "";
             HttpEntity<String> entity = new HttpEntity<>(jsonText, header);
             String address = RSDataSingleton.getInstance().getServerUrl().getImagesUrl();
-
+            Log.i(TAG,"address="+address);
             ResponseEntity response = restTemplate.exchange(address, HttpMethod.GET, entity, String.class);
 
             if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
@@ -68,8 +68,8 @@ public class RSGetImagesTask extends AsyncTask<Void, Void, RSGetImagesResponse> 
                 for (int i=0; i<array.length();i++){
                     JSONObject objCity=array.getJSONObject(i);
 
-                    String name=objCity.getString("name");
-                    String url=objCity.getString("url");
+                    String name=objCity.getString("Name");
+                    String url=objCity.getString("Url");
 
                     Image image=new Image(name, url);
                     listOfImages.add(image);

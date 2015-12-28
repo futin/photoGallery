@@ -28,6 +28,7 @@ public class SingleImageAdapter extends PagerAdapter {
     LayoutInflater inflater;
     ListChangeListener listener;
     int listSize=0;
+
     public SingleImageAdapter(Context context) {
         this.context=context;
         listener= (ListChangeListener) context;
@@ -58,9 +59,6 @@ public class SingleImageAdapter extends PagerAdapter {
         myImage= (ImageView) viewLayout.findViewById(R.id.singleImageView);
         ShareButton shareButton= (ShareButton) viewLayout.findViewById(R.id.shareButton);
         btnDelete= (Button) viewLayout.findViewById(R.id.btnDelete);
-
-
-
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
@@ -76,7 +74,7 @@ public class SingleImageAdapter extends PagerAdapter {
                 if (isDeleted) {
                     makeToast("Image deleted");
                     listSize--;
-                    ListHolder.getInstance().removeFileFromList(position, SingleImageAdapter.this, container);
+                    ListHolder.getInstance().removeFileFromList(position);
                     notifyDataSetChanged();
                     ListHolder.getInstance().notifyGrid();
                 }
@@ -91,7 +89,6 @@ public class SingleImageAdapter extends PagerAdapter {
         shareButton.setShareContent(sharePhoto(bitmap));
         return viewLayout;
     }
-
     /*
         Need to override DestroyItem so switching Objects can be possible
     */
