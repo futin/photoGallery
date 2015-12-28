@@ -29,6 +29,7 @@ public class Home extends Activity implements AsyncTaskListener{
     GridView gridView;
     GridViewAdapter gridViewAdapter;
     int backCounter=0;
+    boolean isChecked=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class Home extends Activity implements AsyncTaskListener{
         if(!isMobileDataEnabled()){
             initAdapter(null);
         }else{
+            isChecked=true;
             rs = new RestService(this);
             rs.getImages();
         }
@@ -102,4 +104,32 @@ public class Home extends Activity implements AsyncTaskListener{
         }
         return mobileDataEnabled;
     }
+/*
+    void listForConn(){
+        TelephonyManager myTelephonyManager=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+
+        PhoneStateListener callStateListener = new PhoneStateListener(){
+            public void onDataConnectionStateChanged(int state){
+                switch(state){
+                    case TelephonyManager.DATA_DISCONNECTED:
+                        Log.i("State: ", "Offline");
+                        if(isChecked) {
+                            isChecked=false;
+                        }
+                        break;
+                    case TelephonyManager.DATA_CONNECTED:
+                        if(!isChecked){
+                            Log.i("State: ", "Online");
+                            rs = new RestService(Home.this);
+                            rs.getImages();
+                            isChecked=true;
+                        }
+                        break;
+                }
+            }
+        };
+        myTelephonyManager.listen(callStateListener,
+                PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
+    }
+    */
 }
