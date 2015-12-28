@@ -1,4 +1,4 @@
-package com.example.futin.importimages.UserInterface;
+package com.example.futin.importimages.UserInterface.home;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 
 import com.example.futin.importimages.R;
 import com.example.futin.importimages.RestService.listeners.ListChangeListener;
+import com.example.futin.importimages.UserInterface.adapters.SingleImageAdapter;
 import com.facebook.FacebookSdk;
 
 /**

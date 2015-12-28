@@ -21,12 +21,12 @@
             android:exported="true" />
 
         <activity
-            android:name=".UserInterface.Home"
+            android:name=".UserInterface.home.Home"
             android:label="@string/app_name" >
 
         </activity>
         <activity
-            android:name=".UserInterface.SingleImageFragment"
+            android:name=".UserInterface.home.SingleImageFragment"
             android:label="@string/title_activity_single_image_adapte"
             android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
@@ -36,7 +36,7 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".UserInterface.Welcome"
+            android:name=".UserInterface.home.Welcome"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

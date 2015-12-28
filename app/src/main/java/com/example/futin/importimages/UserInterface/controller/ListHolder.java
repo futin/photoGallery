@@ -1,7 +1,8 @@
-package com.example.futin.importimages.UserInterface;
+package com.example.futin.importimages.UserInterface.controller;
 
 import com.example.futin.importimages.RestService.cache.FileCache;
 import com.example.futin.importimages.RestService.models.Image;
+import com.example.futin.importimages.UserInterface.adapters.GridViewAdapter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -77,24 +78,24 @@ public class ListHolder {
         return listOfFiles;
     }
 
-    String returnFileName(int position){
+    public String returnFileName(int position){
 
         return listOfFiles.get(position);
     }
     /*
         Method for getting absolute path to our humanityFiles directory
     */
-    String getFilePath(){
+    public String getFilePath(){
         return fileDir.getDirectory().getAbsolutePath();
     }
     /*
         Calculation for getCount method
     */
-    int calculateSizeOfGallery(){
+    public int calculateSizeOfGallery(){
             return listOfFiles.size();
     }
 
-    void clear(){
+    public void clear(){
         if(images != null && combineImages != null) {
             images.clear();
             combineImages.clear();

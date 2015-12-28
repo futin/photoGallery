@@ -1,4 +1,4 @@
-package com.example.futin.importimages.UserInterface;
+package com.example.futin.importimages.UserInterface.home;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,6 +15,8 @@ import com.example.futin.importimages.RestService.RestService;
 import com.example.futin.importimages.RestService.listeners.AsyncTaskListener;
 import com.example.futin.importimages.RestService.models.Image;
 import com.example.futin.importimages.RestService.response.RSGetImagesResponse;
+import com.example.futin.importimages.UserInterface.adapters.GridViewAdapter;
+import com.example.futin.importimages.UserInterface.controller.ListHolder;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

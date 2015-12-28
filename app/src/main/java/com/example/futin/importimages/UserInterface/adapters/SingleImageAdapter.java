@@ -1,4 +1,4 @@
-package com.example.futin.importimages.UserInterface;
+package com.example.futin.importimages.UserInterface.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.futin.importimages.R;
 import com.example.futin.importimages.RestService.listeners.ListChangeListener;
+import com.example.futin.importimages.UserInterface.controller.ListHolder;
 import com.example.futin.importimages.UserInterface.animation.MyAnimation;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
@@ -32,7 +33,7 @@ public class SingleImageAdapter extends PagerAdapter {
     public SingleImageAdapter(Context context) {
         this.context=context;
         listener= (ListChangeListener) context;
-        listSize=ListHolder.getInstance().calculateSizeOfGallery();
+        listSize= ListHolder.getInstance().calculateSizeOfGallery();
     }
 
     @Override

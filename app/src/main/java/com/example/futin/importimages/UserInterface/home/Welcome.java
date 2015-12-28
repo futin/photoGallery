@@ -1,4 +1,4 @@
-package com.example.futin.importimages.UserInterface;
+package com.example.futin.importimages.UserInterface.home;
 
 import android.app.Activity;
 import android.content.Intent;

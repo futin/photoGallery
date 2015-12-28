@@ -1,4 +1,4 @@
-package com.example.futin.importimages.UserInterface;
+package com.example.futin.importimages.UserInterface.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,8 @@ import com.example.futin.importimages.RestService.cache.FileCache;
 import com.example.futin.importimages.RestService.loaders.FileLoader;
 import com.example.futin.importimages.RestService.loaders.ImageLoader;
 import com.example.futin.importimages.RestService.models.Image;
+import com.example.futin.importimages.UserInterface.controller.ListHolder;
+import com.example.futin.importimages.UserInterface.home.SingleImageFragment;
 
 import java.io.File;
 import java.util.ArrayList;
