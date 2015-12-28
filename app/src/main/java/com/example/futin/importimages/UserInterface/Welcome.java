@@ -12,18 +12,12 @@ import com.example.futin.importimages.R;
 
 public class Welcome extends Activity {
     private final int DELAYED_TIME = 3000;
-    ImageView image_welcome;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        image_welcome= (ImageView) findViewById(R.id.image_welcome);
-        AlphaAnimation anim=new AlphaAnimation(1,0.3f);
-        anim.setRepeatMode(Animation.REVERSE);
-        anim.setRepeatCount(Animation.INFINITE);
-        anim.setDuration(1000);
-        image_welcome.setAnimation(anim);
-
+        ImageView image_welcome= (ImageView) findViewById(R.id.image_welcome);
+        animateImage(image_welcome,600);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -32,6 +26,15 @@ public class Welcome extends Activity {
                 finish();
             }
         }, DELAYED_TIME);
+    }
+
+    void animateImage(ImageView image, int duration){
+        AlphaAnimation anim=new AlphaAnimation(0.3f,1f);
+        anim.setRepeatMode(Animation.REVERSE);
+        anim.setRepeatCount(Animation.INFINITE);
+        anim.setDuration(duration);
+        image.setAnimation(anim);
+
     }
 
 
