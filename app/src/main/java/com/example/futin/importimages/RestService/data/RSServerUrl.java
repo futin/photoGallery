@@ -22,7 +22,7 @@ public class RSServerUrl {
         return getBaseUrl();
     }
 
-    public String getImagesUrl(){return getRootUrl()+API_GET_BCG_IMAGES_URL;}
+    public String getImagesUrl(){return getRootUrl()+API_GET_IMAGES_URL;}
 
 
 }

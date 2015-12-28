@@ -36,8 +36,8 @@ public class FileLoader {
         Send file and imageView where we are want to display photo to PhotoToLoad class,
         and call our PhotosLoader through executor
     */
-    public void queuePhoto(File file, ImageView imageView) {
-        imageViews.put(imageView, String.valueOf(file.getName()));
+    public void queuePhoto(String file, ImageView imageView) {
+        imageViews.put(imageView, file);
 
         PhotoToLoad p = new PhotoToLoad(file, imageView);
         executorService.submit(new PhotosLoader(p));
@@ -59,7 +59,7 @@ public class FileLoader {
             try {
                 if (imageViewReused(photoToLoad))
                     return;
-                Bitmap bmp = getBitmapFromFile(photoToLoad.file);
+                Bitmap bmp = getBitmapFromFile(photoToLoad.url);
                 if (imageViewReused(photoToLoad)){
                     return;
                 }
@@ -75,7 +75,7 @@ public class FileLoader {
     */
     boolean imageViewReused(PhotoToLoad photoToLoad) {
         String tag = imageViews.get(photoToLoad.imageView);
-        if (tag == null || !tag.equals(photoToLoad.file.getName()))
+        if (tag == null || !tag.equals(photoToLoad.url))
             return true;
         return false;
     }
@@ -104,13 +104,17 @@ public class FileLoader {
         Using file sent from GridViewAdapter class to decode it with imageLoader's method,
         end return that as Bitmap.
     */
-    public Bitmap getBitmapFromFile(File file){
-        Bitmap b = imageLoader.decodeFile(file);
+    public Bitmap getBitmapFromFile(String file){
+        File f = getFile(file);
+
+        Bitmap b = imageLoader.decodeFile(f);
         if (b != null)
             return b;
-        else{
-            return null;
-        }
+        return null;
+    }
+
+    public File getFile(String url) {
+        return new File(imageLoader.fileCache.getDirectory(), url);
     }
 
 }

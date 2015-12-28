@@ -28,13 +28,14 @@ public class GridViewAdapter extends BaseAdapter {
     LayoutInflater inflater;
     ArrayList<Image> images;
     ArrayList<String>combineImages;
+    ArrayList<String>listOfFiles;
     ImageLoader imageLoader;
     FileCache fc;
     FileLoader fileLoader;
     Map<String, String> imageMap;
+
     int sizeOfGallery=0;
     int fileSize=0;
-
     boolean deleteMode=false;
 
     public GridViewAdapter(Context context, ArrayList<Image> images) {
@@ -50,6 +51,7 @@ public class GridViewAdapter extends BaseAdapter {
         ListHolder.getInstance().setFileDir(fc);
         ListHolder.getInstance().setGrid(this);
         fileSize=fc.getFileSize();
+        listOfFiles=addToFileList();
         if(images != null) {
             initImageMap();
             calculateDifference();
@@ -57,10 +59,25 @@ public class GridViewAdapter extends BaseAdapter {
         sizeOfGallery=calculateSizeOfGallery();
     }
 
-    public void notifyGrid(int size, boolean mode){
-        fileSize=size;
+    ArrayList<String> addToFileList(){
+        ArrayList<String>listOfFiles=new ArrayList<>();
+        for(File f : fc.getFiles()){
+            listOfFiles.add(f.getName());
+        }
+        return listOfFiles;
+    }
+
+    public void notifyGrid(FileCache file, boolean mode){
+        fileSize=file.getFileSize();
+        resetFiles();
         deleteMode=mode;
         reduceList();
+    }
+    void resetFiles(){
+        listOfFiles.clear();
+        for( File f : fc.getFiles()) {
+            listOfFiles.add(f.getName());
+        }
     }
 
     @Override
@@ -84,11 +101,10 @@ public class GridViewAdapter extends BaseAdapter {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(R.layout.single_image, viewGroup, false);
         myImage = (ImageView) itemView.findViewById(R.id.imageView);
-
             if (i >= fileSize && images != null) {
                 loadFromWeb(myImage, i);
                 if(fileSize > 0)
-                    fileSize++;
+                   fileSize++;
             } else {
                 loadFromDisc(myImage, i);
             }
@@ -100,14 +116,12 @@ public class GridViewAdapter extends BaseAdapter {
        threads and display them on main UI.
     */
     void loadFromDisc(ImageView image, int i){
-        File file = fc.getFiles()[i];
-
-        ListHolder.getInstance().addToFiles(file.getName());
+        String file=listOfFiles.get(i);
         fileLoader.queuePhoto(file, image);
 
         if (images != null) {
-            if (imageMap.containsKey(file.getName())) {
-                imageMap.remove(file.getName());
+            if (imageMap.containsKey(file)) {
+                imageMap.remove(file);
             }
         }
     }
@@ -121,6 +135,9 @@ public class GridViewAdapter extends BaseAdapter {
             imageLoader.DisplayImage(images.get(position).getUrl(), myImage);
             ListHolder.getInstance().addToFiles(String.valueOf(images.get(position)
                     .getUrl().hashCode()));
+            listOfFiles.add(String.valueOf(images.get(position)
+                    .getUrl().hashCode()));
+
         }else{
             String url="";
             for(Image img : images){
@@ -133,6 +150,7 @@ public class GridViewAdapter extends BaseAdapter {
                 imageLoader.DisplayImage(url, myImage);
                 imageMap.remove(String.valueOf(url.hashCode()));
                 ListHolder.getInstance().addToFiles(String.valueOf(url.hashCode()));
+                listOfFiles.add(String.valueOf(url.hashCode()));
             }
         }
     }
@@ -178,9 +196,6 @@ public class GridViewAdapter extends BaseAdapter {
 
     public void reduceList(){
         sizeOfGallery--;
-    }
-    public void resetFilesList(){
-
     }
 
     class OnImageClickListener implements View.OnClickListener {

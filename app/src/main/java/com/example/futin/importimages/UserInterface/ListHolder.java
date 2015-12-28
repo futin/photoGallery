@@ -32,14 +32,15 @@ public class ListHolder {
     }
 
     public void notifyGrid(){
-        grid.notifyGrid(fileDir.getFileSize(), true);
+        grid.notifyGrid(fileDir, true);
         resetFiles();
         grid.notifyDataSetChanged();
     }
     void resetFiles(){
         listOfFiles.clear();
-        for( File f : fileDir.getFiles())
+        for( File f : fileDir.getFiles()) {
             listOfFiles.add(f.getName());
+        }
     }
 
     public void setAllLists(ArrayList<Image> images, ArrayList<String>combineImages
