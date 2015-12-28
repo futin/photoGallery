@@ -90,11 +90,11 @@ public class SingleImageAdapter extends PagerAdapter {
 
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         myImage.setImageBitmap(bitmap);
+        shareButton.setShareContent(sharePhoto(bitmap));
 
         new MyAnimation().setAnimation(context,myImage,400,R.anim.fade_in);
 
         container.addView(viewLayout);
-        shareButton.setShareContent(sharePhoto(bitmap));
         return viewLayout;
     }
     /*

@@ -3,12 +3,15 @@ package com.example.futin.importimages.RestService.loaders;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.support.v7.graphics.Palette;
 import android.widget.ImageView;
 
 import com.example.futin.importimages.R;
 import com.example.futin.importimages.UserInterface.animation.MyAnimation;
+import com.example.futin.importimages.UserInterface.controller.ListHolder;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -23,6 +26,8 @@ public class FileLoader {
     ImageLoader imageLoader;
     private Map<ImageView, String> imageViews = Collections
             .synchronizedMap(new WeakHashMap<ImageView, String>());
+    final Map<String, ArrayList<Palette.Swatch>> colorsMap= ListHolder.getInstance().getColorsMap();
+
     ExecutorService executorService;
     Handler handler;
 
@@ -60,6 +65,9 @@ public class FileLoader {
                 if (imageViewReused(photoToLoad))
                     return;
                 Bitmap bmp = getBitmapFromFile(photoToLoad.url);
+                ListHolder.getInstance().setColorsMap(generatePaletteMap(bmp,
+                        photoToLoad.url));
+
                 if (imageViewReused(photoToLoad)){
                     return;
                 }
@@ -119,5 +127,46 @@ public class FileLoader {
     public void destroyThreads(){
         executorService.shutdown();
     }
+    public Map<String, ArrayList<Palette.Swatch>> generatePaletteMap(Bitmap image,final String url){
+        final ArrayList<Palette.Swatch> listOfSwatches=new ArrayList<>();
 
+        Palette.from(image).generate(new Palette.PaletteAsyncListener() {
+            @Override
+            public void onGenerated(Palette palette) {
+                Palette.Swatch mutedSwatch=palette.getMutedSwatch();
+                Palette.Swatch vibrantSwatch=palette.getVibrantSwatch();
+                Palette.Swatch darkVibrantSwatch=palette.getDarkVibrantSwatch();
+                Palette.Swatch darkMutedSwatch=palette.getDarkMutedSwatch();
+                Palette.Swatch lightVibrantSwatch=palette.getLightVibrantSwatch();
+                Palette.Swatch lightMutedSwatch=palette.getLightMutedSwatch();
+
+                if(!colorsMap.containsKey(url)){
+
+                    if(mutedSwatch != null){
+                        listOfSwatches.add(mutedSwatch);
+                    }
+                    if(vibrantSwatch != null){
+                        listOfSwatches.add(vibrantSwatch);
+                    }
+                    if(darkVibrantSwatch != null){
+                        listOfSwatches.add(darkVibrantSwatch);
+                    }
+                    if(darkMutedSwatch != null){
+                        listOfSwatches.add(darkMutedSwatch);
+                    }
+                    if(lightVibrantSwatch != null){
+                        listOfSwatches.add(lightVibrantSwatch);
+                    }
+                    if(lightMutedSwatch != null){
+                        listOfSwatches.add(lightMutedSwatch);
+                    }
+
+                    if(listOfSwatches.size()>0)
+                        colorsMap.put(url, listOfSwatches);
+                }
+            }
+        });
+
+        return colorsMap;
+    }
 }

@@ -29,7 +29,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
@@ -42,7 +41,7 @@ public class ImageLoader {
     FileCache fileCache;
     private Map<ImageView, String> imageViews = Collections
             .synchronizedMap(new WeakHashMap<ImageView, String>());
-    final Map<String, ArrayList<Palette.Swatch>> colorsMap= new HashMap<>();
+    final Map<String, ArrayList<Palette.Swatch>> colorsMap= ListHolder.getInstance().getColorsMap();
 
     ExecutorService executorService;
     // Handler to display images in UI thread
@@ -235,7 +234,6 @@ public class ImageLoader {
                 Palette.Swatch darkMutedSwatch=palette.getDarkMutedSwatch();
                 Palette.Swatch lightVibrantSwatch=palette.getLightVibrantSwatch();
                 Palette.Swatch lightMutedSwatch=palette.getLightMutedSwatch();
-
 
                 if(!colorsMap.containsKey(url)){
 

@@ -8,6 +8,7 @@ import com.example.futin.importimages.UserInterface.adapters.GridViewAdapter;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -23,7 +24,7 @@ public class ListHolder {
     FileCache fileDir;
     GridViewAdapter grid;
 
-    Map<String, ArrayList<Palette.Swatch>> colorsMap;
+    Map<String, ArrayList<Palette.Swatch>> colorsMap=new HashMap<>();
     /*
         Singleton class, designed for list manipulation, end sending data between activities
     */
