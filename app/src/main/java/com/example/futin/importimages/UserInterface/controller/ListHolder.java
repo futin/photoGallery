@@ -11,6 +11,7 @@ import java.util.ArrayList;
  * Created by Futin on 12/25/2015.
  */
 public class ListHolder {
+    //list with web images
     ArrayList<Image> images;
     //list with both disc and web images
     ArrayList<String>combineImages;
@@ -28,6 +29,11 @@ public class ListHolder {
             instance=new ListHolder();
         return instance;
     }
+    public void setAllLists(ArrayList<Image> images, ArrayList<String>combineImages){
+        this.images=images;
+        this.combineImages=combineImages;
+    }
+
     public void setGrid(GridViewAdapter grid){
         this.grid=grid;
     }
@@ -44,11 +50,7 @@ public class ListHolder {
         }
     }
 
-    public void setAllLists(ArrayList<Image> images, ArrayList<String>combineImages
-                            ){
-        this.images=images;
-        this.combineImages=combineImages;
-    }
+
 
     public void removeFileFromList(int position){
         if(position<listOfFiles.size()){
@@ -96,6 +98,9 @@ public class ListHolder {
     }
 
     public void clear(){
+        grid.imageLoader.destroyThreads();
+        grid.fileLoader.destroyThreads();
+
         if(images != null && combineImages != null) {
             images.clear();
             combineImages.clear();

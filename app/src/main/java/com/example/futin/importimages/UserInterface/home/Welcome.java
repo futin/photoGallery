@@ -11,21 +11,25 @@ import android.widget.ImageView;
 import com.example.futin.importimages.R;
 
 public class Welcome extends Activity {
-    private final int DELAYED_TIME = 3000;
+    private final int DELAYED_TIME = 500;
+    Handler handler;
+    Runnable runnable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         ImageView image_welcome= (ImageView) findViewById(R.id.image_welcome);
         animateImage(image_welcome,600);
-        new Handler().postDelayed(new Runnable() {
+        handler=new Handler();
+        runnable=new Runnable() {
             @Override
             public void run() {
                 Intent i = new Intent(Welcome.this, Home.class);
                 startActivity(i);
                 finish();
             }
-        }, DELAYED_TIME);
+        };
+       handler.postDelayed(runnable, DELAYED_TIME);
     }
 
     void animateImage(ImageView image, int duration){
@@ -37,6 +41,9 @@ public class Welcome extends Activity {
 
     }
 
-
-
+    @Override
+    public void onBackPressed() {
+        handler.removeCallbacks(runnable);
+        super.onBackPressed();
+    }
 }

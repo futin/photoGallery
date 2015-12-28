@@ -205,10 +205,14 @@ public class ImageLoader {
             }
         }
     }
+    public void destroyThreads(){
+        executorService.shutdown();
 
+    }
     public void clearCache() {
         memoryCache.clear();
         fileCache.clear();
+
     }
 
 }

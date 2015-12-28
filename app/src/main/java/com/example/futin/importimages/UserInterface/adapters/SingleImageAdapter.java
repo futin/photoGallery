@@ -55,22 +55,20 @@ public class SingleImageAdapter extends PagerAdapter {
         Button btnDelete;
 
         inflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View viewLayout = inflater.inflate(R.layout.single_image_adapter, container,
-                false);
+        View viewLayout = inflater.inflate(R.layout.single_image_adapter, container, false);
         myImage= (ImageView) viewLayout.findViewById(R.id.singleImageView);
         ShareButton shareButton= (ShareButton) viewLayout.findViewById(R.id.shareButton);
         btnDelete= (Button) viewLayout.findViewById(R.id.btnDelete);
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
         String fileName=ListHolder.getInstance().returnFileName(position);
-        String AbsolutefilePath=ListHolder.getInstance().getFilePath()+'/';
-        final String deleteFileFromPath=AbsolutefilePath+fileName;
+        String AbsoluteFilePath=ListHolder.getInstance().getFilePath()+'/';
+
+        final String filePath=AbsoluteFilePath+fileName;
 
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                File file = new File(deleteFileFromPath);
+                File file = new File(filePath);
                 boolean isDeleted = file.delete();
                 if (isDeleted) {
                     makeToast("Image deleted");
@@ -82,11 +80,12 @@ public class SingleImageAdapter extends PagerAdapter {
             }
         });
 
-        Bitmap bitmap = BitmapFactory.decodeFile(AbsolutefilePath+fileName);
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         myImage.setImageBitmap(bitmap);
-        new MyAnimation().setAnimation(context,myImage,400,R.anim.fade_in);
-        container.addView(viewLayout);
 
+        new MyAnimation().setAnimation(context,myImage,400,R.anim.fade_in);
+
+        container.addView(viewLayout);
         shareButton.setShareContent(sharePhoto(bitmap));
         return viewLayout;
     }

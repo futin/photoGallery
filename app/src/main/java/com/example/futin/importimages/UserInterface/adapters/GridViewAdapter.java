@@ -31,10 +31,11 @@ public class GridViewAdapter extends BaseAdapter {
     ArrayList<Image> images;
     ArrayList<String>combineImages;
     ArrayList<String>listOfFiles;
-    ImageLoader imageLoader;
-    FileCache fc;
-    FileLoader fileLoader;
     Map<String, String> imageMap;
+
+    public ImageLoader imageLoader;
+    public FileLoader fileLoader;
+    FileCache fileCache;
 
     int sizeOfGallery=0;
     int fileSize=0;
@@ -47,13 +48,13 @@ public class GridViewAdapter extends BaseAdapter {
     }
 
     void init(){
-        fc=new FileCache(context);
+        fileCache =new FileCache(context);
         imageLoader=new ImageLoader(context);
         fileLoader=new FileLoader(context,imageLoader);
-        ListHolder.getInstance().setFileDir(fc);
+        ListHolder.getInstance().setFileDir(fileCache);
         ListHolder.getInstance().setGrid(this);
-        fileSize=fc.getFileSize();
-        listOfFiles=addToFileList();
+        fileSize= fileCache.getFileSize();
+        listOfFiles=addFilesFromDisc();
         if(images != null) {
             initImageMap();
             calculateDifference();
@@ -61,9 +62,9 @@ public class GridViewAdapter extends BaseAdapter {
         sizeOfGallery=calculateSizeOfGallery();
     }
 
-    ArrayList<String> addToFileList(){
+    ArrayList<String> addFilesFromDisc(){
         ArrayList<String>listOfFiles=new ArrayList<>();
-        for(File f : fc.getFiles()){
+        for(File f : fileCache.getFiles()){
             listOfFiles.add(f.getName());
         }
         return listOfFiles;
@@ -77,7 +78,7 @@ public class GridViewAdapter extends BaseAdapter {
     }
     void resetFiles(){
         listOfFiles.clear();
-        for( File f : fc.getFiles()) {
+        for( File f : fileCache.getFiles()) {
             listOfFiles.add(f.getName());
         }
     }
@@ -133,12 +134,17 @@ public class GridViewAdapter extends BaseAdapter {
         then decode and scale them to reduce memory consumption
     */
     void loadFromWeb(ImageView myImage, int position){
+        String file;
+        /*
+            Size of files on disc will be 0 only on first app activation, and because of that
+            we need only images from web
+        */
         if(fileSize == 0){
+            file=String.valueOf(images.get(position).getUrl().hashCode());
             imageLoader.DisplayImage(images.get(position).getUrl(), myImage);
-            ListHolder.getInstance().addToFiles(String.valueOf(images.get(position)
-                    .getUrl().hashCode()));
-            listOfFiles.add(String.valueOf(images.get(position)
-                    .getUrl().hashCode()));
+
+            // files need to be added to list, so SingleImageAdapter can read them from this list
+            ListHolder.getInstance().addToFiles(file);
 
         }else{
             String url="";
@@ -151,8 +157,10 @@ public class GridViewAdapter extends BaseAdapter {
             if(!url.equalsIgnoreCase("")) {
                 imageLoader.DisplayImage(url, myImage);
                 imageMap.remove(String.valueOf(url.hashCode()));
-                ListHolder.getInstance().addToFiles(String.valueOf(url.hashCode()));
-                listOfFiles.add(String.valueOf(url.hashCode()));
+
+                file=String.valueOf(url.hashCode());
+                ListHolder.getInstance().addToFiles(file);
+                listOfFiles.add(file);
             }
         }
     }
@@ -176,8 +184,8 @@ public class GridViewAdapter extends BaseAdapter {
         for(Map.Entry<String, String> e: imageMap.entrySet()){
             combineImages.add(e.getValue());
         }
-        if(images != null && fc != null){
-            for(File file : fc.getFiles()) {
+        if(images != null && fileCache != null){
+            for(File file : fileCache.getFiles()) {
                 if(!imageMap.containsKey(String.valueOf(file.getName()))){
                     combineImages.add((String.valueOf(file.getName())));
                 }
@@ -189,9 +197,9 @@ public class GridViewAdapter extends BaseAdapter {
     */
     int calculateSizeOfGallery(){
         if(images == null || deleteMode){
-            return fc.getFileSize();
+            return fileCache.getFileSize();
         }else{
-            return images.size()>fc.getFileSize() ?
+            return images.size()> fileCache.getFileSize() ?
                     images.size() : combineImages.size();
         }
     }

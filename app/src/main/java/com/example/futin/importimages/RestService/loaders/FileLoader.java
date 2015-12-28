@@ -116,5 +116,8 @@ public class FileLoader {
     public File getFile(String url) {
         return new File(imageLoader.fileCache.getDirectory(), url);
     }
+    public void destroyThreads(){
+        executorService.shutdown();
+    }
 
 }
