@@ -41,7 +41,7 @@ public class SingleImageAdapter extends PagerAdapter {
         listener= (ListChangeListener) context;
         listSize= ListHolder.getInstance().calculateSizeOfGallery();
         colorsMap=ListHolder.getInstance().getColorsMap();
-        imageColor=new ImageColor(btn_00,btn_01,btn_02,btn_10,btn_11,btn_12,colorsMap);
+        imageColor=new ImageColor(btn_00,btn_01,btn_02,btn_10,btn_11,btn_12,colorsMap, context);
     }
 
     @Override
