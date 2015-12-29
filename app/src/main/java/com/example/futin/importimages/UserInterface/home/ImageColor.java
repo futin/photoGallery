@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.futin.importimages.R;
+import com.example.futin.importimages.RestService.listeners.ListChangeListener;
 import com.example.futin.importimages.UserInterface.controller.ListHolder;
 
 import java.util.ArrayList;
@@ -22,7 +23,8 @@ public class ImageColor implements View.OnClickListener{
     ArrayList<String>listOfSame;
     ArrayList<Palette.Swatch> listOfSwatch;
     Context context;
-    boolean isFirst=true;
+    ListChangeListener listener;
+
     public ImageColor(Button btn_00, Button btn_01, Button btn_02, Button btn_10, Button btn_11,
                       Button btn_12, Map<String, ArrayList<Palette.Swatch>> colorsMap,Context context) {
         this.btn_00 = btn_00;
@@ -34,6 +36,7 @@ public class ImageColor implements View.OnClickListener{
         this.colorsMap = colorsMap;
         this.context=context;
         listOfSame=new ArrayList<>();
+        listener= (ListChangeListener) context;
     }
     public void init(View view, String url, String urlForSame){
         initButtons(view,getColorRGB(url),url);
@@ -139,7 +142,7 @@ public class ImageColor implements View.OnClickListener{
     void onClickListChange(int i){
         for(Map.Entry<String, ArrayList<Palette.Swatch>> entry : colorsMap.entrySet()){
             for(Palette.Swatch swatch : entry.getValue()){
-                if(Math.abs(swatch.getRgb()- listOfSwatch.get(i).getRgb())<=999999){
+                if(Math.abs(swatch.getRgb()- listOfSwatch.get(i).getRgb())<=99999){
                     if(!listOfSame.contains(entry.getKey()))
                         listOfSame.add(entry.getKey());
                 }
@@ -147,6 +150,7 @@ public class ImageColor implements View.OnClickListener{
         }
         if(listOfSame.size()>0) {
             ListHolder.getInstance().setListOfSame(listOfSame);
+            listener.closeViewPager();
         }
 
     }
@@ -165,5 +169,6 @@ public class ImageColor implements View.OnClickListener{
     void makeToast(String text){
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
+
 
 }

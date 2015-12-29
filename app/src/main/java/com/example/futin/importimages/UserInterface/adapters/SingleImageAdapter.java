@@ -88,9 +88,8 @@ public class SingleImageAdapter extends PagerAdapter {
                 File file = new File(filePath);
                 boolean isDeleted = file.delete();
                 if (isDeleted) {
+                    makeToast("Image deleted");
                     if(!isColorClicked) {
-                        makeToast("Image deleted");
-
                         ListHolder.getInstance().removeFileFromList(position);
                         ListHolder.getInstance().removeFileFromMap(fileName);
                         listSize--;
