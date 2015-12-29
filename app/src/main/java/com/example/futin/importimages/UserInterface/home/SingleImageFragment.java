@@ -32,10 +32,9 @@ public class SingleImageFragment extends Activity implements ListChangeListener 
 
         Intent i = getIntent();
         int position = i.getIntExtra("position", 0);
-        adapter = new SingleImageAdapter(this);
+        adapter = new SingleImageAdapter(this,viewPager);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position);
-
     }
     @Override
     public void closeViewPager() {

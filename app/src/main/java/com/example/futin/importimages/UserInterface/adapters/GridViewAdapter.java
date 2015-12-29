@@ -31,6 +31,8 @@ public class GridViewAdapter extends BaseAdapter {
     ArrayList<Image> images;
     ArrayList<String>combineImages;
     ArrayList<String>listOfFiles;
+    ArrayList<String>listOfSame;
+
     Map<String, String> imageMap;
 
     public ImageLoader imageLoader;
@@ -76,6 +78,12 @@ public class GridViewAdapter extends BaseAdapter {
         deleteMode=mode;
         reduceList();
     }
+    public void notifyForSame(ArrayList<String>listOfSame){
+        this.listOfSame=listOfSame;
+        sizeOfGallery=calculateSizeOfGallery();
+        notifyDataSetChanged();
+    }
+
     void resetFiles(){
         listOfFiles.clear();
         for( File f : fileCache.getFiles()) {
@@ -104,7 +112,7 @@ public class GridViewAdapter extends BaseAdapter {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(R.layout.single_image, viewGroup, false);
         myImage = (ImageView) itemView.findViewById(R.id.imageView);
-            if (i >= fileSize && images != null) {
+            if (i >= fileSize && images != null && listOfSame==null) {
                 loadFromWeb(myImage, i);
                 if(fileSize > 0)
                    fileSize++;
@@ -119,8 +127,14 @@ public class GridViewAdapter extends BaseAdapter {
        threads and display them on main UI.
     */
     void loadFromDisc(ImageView image, int i){
-        String file=listOfFiles.get(i);
-        fileLoader.queuePhoto(file, image);
+        String file=null;
+        if(listOfSame == null){
+             file=listOfFiles.get(i);
+            fileLoader.queuePhoto(file, image);
+        }else{
+             file=listOfSame.get(i);
+            fileLoader.queuePhoto(file, image);
+        }
 
         if (images != null) {
             if (imageMap.containsKey(file)) {
@@ -196,11 +210,15 @@ public class GridViewAdapter extends BaseAdapter {
         Calculation for getCount method
     */
     int calculateSizeOfGallery(){
-        if(images == null || deleteMode){
-            return fileCache.getFileSize();
+        if(listOfSame == null) {
+            if (images == null || deleteMode) {
+                return fileCache.getFileSize();
+            } else {
+                return images.size() > fileCache.getFileSize() ?
+                        images.size() : combineImages.size();
+            }
         }else{
-            return images.size()> fileCache.getFileSize() ?
-                    images.size() : combineImages.size();
+            return listOfSame.size();
         }
     }
 

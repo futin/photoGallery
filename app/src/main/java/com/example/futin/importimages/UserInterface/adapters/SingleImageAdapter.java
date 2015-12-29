@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.graphics.Palette;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,12 +37,18 @@ public class SingleImageAdapter extends PagerAdapter {
     Button btn_00, btn_01,btn_02, btn_10, btn_11, btn_12;
     Map<String, ArrayList<Palette.Swatch>>colorsMap;
     ImageColor imageColor;
-    public SingleImageAdapter(Context context) {
+    ViewPager viewPager;
+    boolean isColorClicked=false;
+    public SingleImageAdapter(Context context, ViewPager viewPager) {
         this.context=context;
         listener= (ListChangeListener) context;
         listSize= ListHolder.getInstance().calculateSizeOfGallery();
         colorsMap=ListHolder.getInstance().getColorsMap();
+        isColorClicked= ListHolder.getInstance().checkForSameMap();
+
         imageColor=new ImageColor(btn_00,btn_01,btn_02,btn_10,btn_11,btn_12,colorsMap, context);
+        ListHolder.getInstance().setSingleImageAdapter(this);
+        this.viewPager=viewPager;
     }
 
     @Override
@@ -64,11 +71,13 @@ public class SingleImageAdapter extends PagerAdapter {
 
         inflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View viewLayout = inflater.inflate(R.layout.single_image_adapter, container, false);
+
         myImage= (ImageView) viewLayout.findViewById(R.id.singleImageView);
         ShareButton shareButton= (ShareButton) viewLayout.findViewById(R.id.shareButton);
         btnDelete= (Button) viewLayout.findViewById(R.id.btnDelete);
-        String fileName=ListHolder.getInstance().returnFileName(position);
-        imageColor.init(viewLayout,fileName);
+        final String fileName=ListHolder.getInstance().returnFileName(position);
+        String fileNameForListOfSame=ListHolder.getInstance().returnFileName(viewPager.getCurrentItem());
+        imageColor.init(viewLayout,fileName, fileNameForListOfSame);
         String AbsoluteFilePath=ListHolder.getInstance().getFilePath()+'/';
 
         final String filePath=AbsoluteFilePath+fileName;
@@ -79,11 +88,22 @@ public class SingleImageAdapter extends PagerAdapter {
                 File file = new File(filePath);
                 boolean isDeleted = file.delete();
                 if (isDeleted) {
-                    makeToast("Image deleted");
-                    listSize--;
-                    ListHolder.getInstance().removeFileFromList(position);
-                    notifyDataSetChanged();
-                    ListHolder.getInstance().notifyGrid();
+                    if(!isColorClicked) {
+                        makeToast("Image deleted");
+
+                        ListHolder.getInstance().removeFileFromList(position);
+                        ListHolder.getInstance().removeFileFromMap(fileName);
+                        listSize--;
+                        notifyDataSetChanged();
+                        ListHolder.getInstance().notifyGrid();
+                    }else{
+                        ListHolder.getInstance().removeFileFromSameList(position);
+                        ListHolder.getInstance().removeFileFromList(position);
+                        ListHolder.getInstance().removeFileFromMap(fileName);
+                        listSize--;
+                        notifyDataSetChanged();
+                        ListHolder.getInstance().notifyGridForSameColor();
+                    }
                 }
             }
         });
@@ -91,7 +111,6 @@ public class SingleImageAdapter extends PagerAdapter {
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         myImage.setImageBitmap(bitmap);
         shareButton.setShareContent(sharePhoto(bitmap));
-
         new MyAnimation().setAnimation(context,myImage,400,R.anim.fade_in);
 
         container.addView(viewLayout);
@@ -124,6 +143,12 @@ public class SingleImageAdapter extends PagerAdapter {
                 .addPhoto(photo)
                 .build();
         return content;
+    }
+
+    public void notifyForSame(){
+        isColorClicked= ListHolder.getInstance().checkForSameMap();
+        listSize=ListHolder.getInstance().calculateSizeOfGallery();
+        notifyDataSetChanged();
     }
 
 }

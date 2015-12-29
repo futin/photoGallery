@@ -1,10 +1,12 @@
 package com.example.futin.importimages.UserInterface.controller;
 
 import android.support.v7.graphics.Palette;
+import android.util.Log;
 
 import com.example.futin.importimages.RestService.cache.FileCache;
 import com.example.futin.importimages.RestService.models.Image;
 import com.example.futin.importimages.UserInterface.adapters.GridViewAdapter;
+import com.example.futin.importimages.UserInterface.adapters.SingleImageAdapter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ public class ListHolder {
     ArrayList<String>listOfFiles;
     FileCache fileDir;
     GridViewAdapter grid;
+    SingleImageAdapter singleImageAdapter;
+    ArrayList<String>listOfSame;
 
     Map<String, ArrayList<Palette.Swatch>> colorsMap=new HashMap<>();
     /*
@@ -44,6 +48,10 @@ public class ListHolder {
         this.grid=grid;
     }
 
+    public void setSingleImageAdapter(SingleImageAdapter singleImageAdapter) {
+        this.singleImageAdapter = singleImageAdapter;
+    }
+
     public void setFileDir(FileCache file){
         fileDir=file;
         convertFilesToList();
@@ -55,6 +63,14 @@ public class ListHolder {
         return colorsMap;
     }
 
+
+    public void setListOfSame(ArrayList<String> listOfSame) {
+        this.listOfSame = listOfSame;
+        grid.notifyForSame(listOfSame);
+        singleImageAdapter.notifyForSame();
+    }
+
+
     public void addToFiles(String url){
         if(!listOfFiles.contains(url))
             listOfFiles.add(url);
@@ -65,6 +81,15 @@ public class ListHolder {
         resetFiles();
         grid.notifyDataSetChanged();
     }
+    public void notifyGridForSameColor(){
+        grid.notifyForSame(listOfSame);
+        grid.notifyDataSetChanged();
+    }
+
+    public boolean checkForSameMap(){
+        return listOfSame != null;
+    }
+
     void resetFiles(){
         listOfFiles.clear();
         for( File f : fileDir.getFiles()) {
@@ -77,6 +102,17 @@ public class ListHolder {
             listOfFiles.remove(position);
         }
     }
+    public void removeFileFromSameList(int position){
+        if(position<listOfSame.size()){
+            listOfSame.remove(position);
+        }
+        Log.i("","sameDel="+listOfSame.size());
+
+    }
+    public void removeFileFromMap(String file){
+        if(colorsMap.containsKey(file))
+            colorsMap.remove(file);
+    }
 
     void convertFilesToList(){
         listOfFiles=new ArrayList<>();
@@ -87,8 +123,7 @@ public class ListHolder {
     }
 
     public String returnFileName(int position){
-
-        return listOfFiles.get(position);
+           return listOfSame == null ? listOfFiles.get(position) : listOfSame.get(position);
     }
 
     /*
@@ -102,18 +137,22 @@ public class ListHolder {
         Calculation for getCount method
     */
     public int calculateSizeOfGallery(){
-            return listOfFiles.size();
+        return listOfSame == null ? listOfFiles.size() : listOfSame.size();
     }
 
     public void clear(){
-        grid.imageLoader.destroyThreads();
-        grid.fileLoader.destroyThreads();
 
-        if(images != null && combineImages != null) {
-            images.clear();
-            combineImages.clear();
-        }
-        listOfFiles.clear();
+        if(images != null)
+            images=null;
+
+        if(combineImages != null)
+            combineImages=null;
+
+        if(listOfSame != null)
+            listOfSame=null;
+
+        if(listOfFiles != null)
+        listOfFiles=null;
     }
 
 

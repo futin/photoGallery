@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.futin.importimages.R;
+import com.example.futin.importimages.UserInterface.controller.ListHolder;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -18,7 +19,10 @@ import java.util.Map;
 public class ImageColor implements View.OnClickListener{
     Button btn_00, btn_01,btn_02, btn_10, btn_11, btn_12;
     Map<String, ArrayList<Palette.Swatch>> colorsMap;
+    ArrayList<String>listOfSame;
+    ArrayList<Palette.Swatch> listOfSwatch;
     Context context;
+    boolean isFirst=true;
     public ImageColor(Button btn_00, Button btn_01, Button btn_02, Button btn_10, Button btn_11,
                       Button btn_12, Map<String, ArrayList<Palette.Swatch>> colorsMap,Context context) {
         this.btn_00 = btn_00;
@@ -29,9 +33,11 @@ public class ImageColor implements View.OnClickListener{
         this.btn_12 = btn_12;
         this.colorsMap = colorsMap;
         this.context=context;
+        listOfSame=new ArrayList<>();
     }
-    public void init(View view, String url){
+    public void init(View view, String url, String urlForSame){
         initButtons(view,getColorRGB(url),url);
+        getOldListOfSwatch(urlForSame);
     }
      void initButtons(View view, ArrayList<Integer> colors, String url){
         btn_00= (Button) view.findViewById(R.id.btn_00);
@@ -40,14 +46,14 @@ public class ImageColor implements View.OnClickListener{
         btn_10= (Button) view.findViewById(R.id.btn_10);
         btn_11= (Button) view.findViewById(R.id.btn_11);
         btn_12= (Button) view.findViewById(R.id.btn_12);
-/*
+
         btn_00.setOnClickListener(this);
         btn_01.setOnClickListener(this);
         btn_02.setOnClickListener(this);
         btn_10.setOnClickListener(this);
         btn_11.setOnClickListener(this);
         btn_12.setOnClickListener(this);
-*/
+
          if(colors.size() > 0 && colorsMap.containsKey(url)) {
             setButtonColors(colors);
         }
@@ -105,38 +111,55 @@ public class ImageColor implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-/*        switch (view.getId()){
+        switch (view.getId()){
             case R.id.btn_00:
-                Drawable drawable = btn_00.getBackground();
-                for(Map.Entry<String, ArrayList<Palette.Swatch>> entry : colorsMap.entrySet()){
-                    for(Palette.Swatch swatch : entry.getValue()){
-                        if(swatch.getRgb() == color){
-                            listOfSame.add(color);
-                        }
-                    }
-                }
-                Log.i("","list of same="+listOfSame.toString());
+                onClickListChange(0);
                 break;
             case R.id.btn_01:
-
+                onClickListChange(1);
                 break;
             case R.id.btn_02:
-
+                onClickListChange(2);
                 break;
             case R.id.btn_10:
-
+                onClickListChange(3);
                 break;
             case R.id.btn_11:
-
+                onClickListChange(4);
                 break;
             case R.id.btn_12:
-
+                onClickListChange(5);
                 break;
-
             default:
                 break;
         }
-        */
+
+    }
+
+    void onClickListChange(int i){
+        for(Map.Entry<String, ArrayList<Palette.Swatch>> entry : colorsMap.entrySet()){
+            for(Palette.Swatch swatch : entry.getValue()){
+                if(Math.abs(swatch.getRgb()- listOfSwatch.get(i).getRgb())<=999999){
+                    if(!listOfSame.contains(entry.getKey()))
+                        listOfSame.add(entry.getKey());
+                }
+            }
+        }
+        if(listOfSame.size()>0) {
+            ListHolder.getInstance().setListOfSame(listOfSame);
+        }
+
+    }
+
+    ArrayList<Palette.Swatch> getOldListOfSwatch(String fileName){
+            listOfSwatch = new ArrayList<>();
+            listOfSame = new ArrayList<>();
+            if (colorsMap.containsKey(fileName)) {
+                for (Palette.Swatch swatch : colorsMap.get(fileName)) {
+                    listOfSwatch.add(swatch);
+                }
+            }
+        return listOfSwatch;
     }
 
     void makeToast(String text){

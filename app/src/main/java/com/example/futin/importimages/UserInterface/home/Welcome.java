@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import com.example.futin.importimages.R;
 
 public class Welcome extends Activity {
-    private final int DELAYED_TIME = 2000;
+    private final int DELAYED_TIME = 200;
     Handler handler;
     Runnable runnable;
     @Override
