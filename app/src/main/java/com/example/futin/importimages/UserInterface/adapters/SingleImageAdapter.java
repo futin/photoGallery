@@ -89,18 +89,14 @@ public class SingleImageAdapter extends PagerAdapter {
                 boolean isDeleted = file.delete();
                 if (isDeleted) {
                     makeToast("Image deleted");
+                    ListHolder.getInstance().removeFileFromList(position);
+                    ListHolder.getInstance().removeFileFromMap(fileName);
+                    listSize--;
+                    notifyDataSetChanged();
                     if(!isColorClicked) {
-                        ListHolder.getInstance().removeFileFromList(position);
-                        ListHolder.getInstance().removeFileFromMap(fileName);
-                        listSize--;
-                        notifyDataSetChanged();
                         ListHolder.getInstance().notifyGrid();
                     }else{
                         ListHolder.getInstance().removeFileFromSameList(position);
-                        ListHolder.getInstance().removeFileFromList(position);
-                        ListHolder.getInstance().removeFileFromMap(fileName);
-                        listSize--;
-                        notifyDataSetChanged();
                         ListHolder.getInstance().notifyGridForSameColor();
                     }
                 }

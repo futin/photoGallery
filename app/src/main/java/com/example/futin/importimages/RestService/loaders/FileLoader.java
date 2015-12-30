@@ -6,8 +6,6 @@ import android.os.Handler;
 import android.support.v7.graphics.Palette;
 import android.widget.ImageView;
 
-import com.example.futin.importimages.R;
-import com.example.futin.importimages.UserInterface.animation.MyAnimation;
 import com.example.futin.importimages.UserInterface.controller.ListHolder;
 
 import java.io.File;
@@ -104,7 +102,7 @@ public class FileLoader {
                 return;
             if (bitmap != null) {
                 photoToLoad.imageView.setImageBitmap(bitmap);
-                new MyAnimation().setAnimationRandom(context, photoToLoad.imageView, 500, R.anim.fade_in_and_scale);
+              //  new MyAnimation().setAnimationRandom(context, photoToLoad.imageView, 500, R.anim.fade_in_and_scale);
             }
         }
     }

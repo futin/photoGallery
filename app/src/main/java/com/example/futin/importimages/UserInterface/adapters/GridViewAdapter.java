@@ -42,6 +42,7 @@ public class GridViewAdapter extends BaseAdapter {
     int sizeOfGallery=0;
     int fileSize=0;
     boolean deleteMode=false;
+    ViewHolder viewHolder;
 
     public GridViewAdapter(Context context, ArrayList<Image> images) {
         this.context = context;
@@ -108,19 +109,24 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        ImageView myImage;
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View itemView = inflater.inflate(R.layout.single_image, viewGroup, false);
-        myImage = (ImageView) itemView.findViewById(R.id.imageView);
+        if(view == null){
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.single_image, viewGroup, false);
+            viewHolder=new ViewHolder();
+            viewHolder.imageView = (ImageView) view.findViewById(R.id.imageView);
+            view.setTag(viewHolder);
+        }else{
+            viewHolder = (ViewHolder) view.getTag();
+        }
             if (i >= fileSize && images != null && listOfSame==null) {
-                loadFromWeb(myImage, i);
+                loadFromWeb(viewHolder.imageView, i);
                 if(fileSize > 0)
                    fileSize++;
             } else {
-                loadFromDisc(myImage, i);
+                loadFromDisc(viewHolder.imageView, i);
             }
-        itemView.setOnClickListener(new OnImageClickListener(i));
-        return itemView;
+        viewHolder.imageView.setOnClickListener(new OnImageClickListener(i));
+        return view;
     }
     /*
        Load files from disc, using queuePhoto method in order to place all photos in separate
@@ -245,6 +251,11 @@ public class GridViewAdapter extends BaseAdapter {
             i.putExtra("position", position);
             context.startActivity(i);
         }
+    }
+
+    private class ViewHolder{
+        ImageView imageView;
+        String url;
     }
 
 }
