@@ -128,6 +128,7 @@ public class GridViewAdapter extends BaseAdapter {
         viewHolder.imageView.setOnClickListener(new OnImageClickListener(i));
         return view;
     }
+
     /*
        Load files from disc, using queuePhoto method in order to place all photos in separate
        threads and display them on main UI.

@@ -102,7 +102,7 @@ public class FileLoader {
                 return;
             if (bitmap != null) {
                 photoToLoad.imageView.setImageBitmap(bitmap);
-              //  new MyAnimation().setAnimationRandom(context, photoToLoad.imageView, 500, R.anim.fade_in_and_scale);
+               // new MyAnimation().setAnimationRandom(context, photoToLoad.imageView, 250, R.anim.fade_in);
             }
         }
     }
