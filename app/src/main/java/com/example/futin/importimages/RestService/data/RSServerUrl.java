@@ -8,7 +8,7 @@ public class RSServerUrl {
     /*
         Class used for every path in project
     */
-    private final static String API_BASE_URL="http://humanitychallenge.mockable.io";
+    private final static String API_BASE_URL="";
    // private final static String API_ROOT_URL="/humanity";
 
     private final static String API_GET_IMAGES_URL="/getImages";
